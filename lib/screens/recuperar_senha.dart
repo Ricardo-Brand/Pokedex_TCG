@@ -131,34 +131,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          // Align(
-          //   alignment: Alignment.topCenter,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(top: screenHeight * 0.52),
-          //     child: Text(
-          //       infoMessage,
-          //       style: GoogleFonts.bungee(
-          //         color: const Color.fromARGB(255, 0, 0, 0),
-          //         fontSize: 18,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Align(
-          //   alignment: Alignment.topCenter,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(top: screenHeight * 0.52),
-          //     child: Text(
-          //       infoMessage,
-          //       style: GoogleFonts.bungee(
-          //         color: const Color.fromARGB(255, 255, 255, 255),
-          //         fontSize: 18,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-                    // Texto descritivo
+          // Texto descritivo
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -248,9 +221,6 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
               ),
             ),
           ),
-
-
-
         ],
       ),
     );
