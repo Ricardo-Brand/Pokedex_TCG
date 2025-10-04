@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'sobre.dart';
 import 'recuperar_senha.dart';
 import 'cadastrar.dart';
+import 'inicio.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -193,9 +194,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 140,
                 height: 45,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // ação ao clicar
-                  },
+                   onPressed: () {
+                  // Navegar para a tela LoginScreen com animação personalizada
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const InicioScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        // Define de onde a tela nova vai começar
+                        const begin = Offset(1.0, 0.0); // 1.0 = fora da tela pela DIREITA
+                        const end = Offset.zero;        // 0.0 = posição normal
+                        const curve = Curves.easeInOut; // curva suave
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFE1000C), // cor do botão
                     shape: RoundedRectangleBorder(
