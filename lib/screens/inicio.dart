@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
 import 'login.dart';
+import 'list.dart';
+import 'adicionar.dart';
+import 'cvt.dart';
+import 'favoritos.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({super.key});
@@ -12,6 +17,32 @@ class InicioScreen extends StatefulWidget {
 
 class _InicioScreenState extends State<InicioScreen> {
   bool showDetails = false;
+  List<PokemonCard> _pokemons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPokemons();
+  }
+
+  Future<void> _loadPokemons() async {
+    final pokemons = await loadPokemonCards(); // função que lê o .txt
+    setState(() {
+      _pokemons = pokemons;
+    });
+  }
+
+  String _getStatus(int index) {
+    // Exemplo simples: alterna entre os três
+    switch (index % 3) {
+      case 0:
+        return "Comprado";
+      case 1:
+        return "Vendido";
+      default:
+        return "Trocado";
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -22,6 +53,11 @@ class _InicioScreenState extends State<InicioScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
+
+          /*
+            Fundo e Título 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -30,7 +66,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Botão logout
+          /*
+           Botão logout 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -85,7 +124,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Pesquisar TextField
+          /* 
+            Pesquisar TextField 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -110,7 +152,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Lista e seus ícones
+          /* 
+            Lista e seus ícones 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -124,7 +169,11 @@ class _InicioScreenState extends State<InicioScreen> {
                 ),
                 child: Stack(
                   children: [
-                    // Linhas verticais contínuas
+
+                    /* 
+                      Linhas verticais contínuas 
+                    */
+
                     Positioned(
                       left: 110,
                       top: 0,
@@ -144,7 +193,10 @@ class _InicioScreenState extends State<InicioScreen> {
                       ),
                     ),
 
-                    // Coluna para reservar espaço fixo
+                    /* 
+                      Coluna para reservar espaço fixo 
+                    */
+
                     Column(
                       children: [
                         const SizedBox(height: 45),
@@ -152,17 +204,22 @@ class _InicioScreenState extends State<InicioScreen> {
                         Expanded(
                           child: ListView.builder(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: 20,
+                            itemCount: _pokemons.length,
                             itemBuilder: (context, index) {
+                               final pokemon = _pokemons[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   children: [
-                                    // Coluna 1 - Nome do Pokémon
+                                    
+                                    /* 
+                                      Coluna 1 - Nome do Pokémon 
+                                    */
+
                                     SizedBox(
                                       width: 120, // largura fixa
                                       child: Text(
-                                        'Crabominable',
+                                        pokemon.name,
                                          style: GoogleFonts.bungee(
                                           textStyle: TextStyle(
                                             fontSize: 10,
@@ -174,11 +231,14 @@ class _InicioScreenState extends State<InicioScreen> {
 
                                     SizedBox(width: 8), // espaço entre colunas
 
-                                    // Coluna 2 - Código
+                                    /* 
+                                      Coluna 2 - Código 
+                                    */
+
                                     SizedBox(
                                       width: 60,
                                       child: Text(
-                                        '#00${index + 1}',
+                                        pokemon.code,
                                          style: GoogleFonts.bungee(
                                           textStyle: TextStyle(
                                             fontSize: 10,
@@ -190,11 +250,14 @@ class _InicioScreenState extends State<InicioScreen> {
 
                                     SizedBox(width: 35),
 
-                                    // Coluna 3 - Situação
+                                    /* 
+                                      Coluna 3 - Situação 
+                                    */
+
                                     SizedBox(
                                       width: 80,
                                       child: Text(
-                                        index % 2 == 0 ? 'Comprado' : 'Trocado',
+                                        _getStatus(index),
                                         style: GoogleFonts.bungee(
                                           textStyle: TextStyle(
                                             fontSize: 10,
@@ -206,12 +269,16 @@ class _InicioScreenState extends State<InicioScreen> {
 
                                     SizedBox(width: 5),
 
-                                    // Coluna 4 - Botão Edit
+                                    /* 
+                                      Coluna 4 - Botão Edit 
+                                    */
+
                                     SizedBox(
                                       width: 20,
                                       height: 20,
                                       child: ElevatedButton(
                                         onPressed: () {
+                                          final pokemon = _pokemons[index];
                                           showDialog(
                                             context: context,
                                             barrierDismissible: false, // não fecha clicando fora
@@ -227,7 +294,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                                     borderRadius: BorderRadius.circular(20),
                                                   ),
 
-                                                  // ícones dentro do quadrado
+                                                  /* 
+                                                    Ícones dentro do quadrado
+                                                  */
+
                                                   child: Stack(
                                                     children: [
                                                       // linha do meio
@@ -242,7 +312,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                                         ),
                                                       ),
 
-                                                      // Botão "Voltar" 
+                                                      /*
+                                                        Botão Voltar
+                                                      */
+
                                                       Positioned(
                                                         top: 200,    // distância do topo do quadrado
                                                         right: 130,  // distância da direita
@@ -272,7 +345,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                                         ),
                                                       ),
 
-                                                      // Botão "Remover" 
+                                                      /*
+                                                        Botão Remover
+                                                      */ 
+
                                                       Positioned(
                                                         top: 150,    // distância do topo do quadrado
                                                         right: 195,  // distância da direita
@@ -302,7 +378,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                                         ),
                                                       ),
 
-                                                      // Botão "Editar"                                               // Botão "Remover" 
+                                                      /*
+                                                        Botão Editar
+                                                      */         
+                                                    
                                                       Positioned(
                                                         top: 150,    // distância do topo do quadrado
                                                         right: 40,  // distância da direita
@@ -311,8 +390,30 @@ class _InicioScreenState extends State<InicioScreen> {
                                                           height: 40,  // altura
                                                           child: ElevatedButton(
                                                             onPressed: () {
-                                                              Navigator.pop(context); // fecha o quadrado
+                                                              final selectedPokemon = _pokemons[index];
+                                                              Navigator.push(
+                                                                context,
+                                                                PageRouteBuilder(
+                                                                  pageBuilder: (context, animation, secondaryAnimation) =>
+                                                                     CvtScreen(pokemon: selectedPokemon),
+                                                                  transitionsBuilder:
+                                                                      (context, animation, secondaryAnimation, child) {
+                                                                    const begin = Offset(1.0, 0.0);
+                                                                    const end = Offset.zero;
+                                                                    const curve = Curves.easeInOut;
+
+                                                                    var tween = Tween(begin: begin, end: end)
+                                                                        .chain(CurveTween(curve: curve));
+
+                                                                    return SlideTransition(
+                                                                      position: animation.drive(tween),
+                                                                      child: child,
+                                                                    );
+                                                                  },
+                                                                ),  
+                                                              );
                                                             },
+                                                            
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFFC00F0C),
                                                               shape: RoundedRectangleBorder(
@@ -332,6 +433,9 @@ class _InicioScreenState extends State<InicioScreen> {
                                                         ),
                                                       ),
 
+                                                      /* 
+                                                        Text 'Pokemon', 'Código'
+                                                      */
 
                                                       Padding(
                                                         padding: EdgeInsets.all(0), // espaço ao redor da linha
@@ -359,7 +463,49 @@ class _InicioScreenState extends State<InicioScreen> {
                                                             ),
                                                           ],
                                                         ),
-                                                      )
+                                                      ),
+                                                      
+                                                     Padding(
+                                                      padding: const EdgeInsets.only(top: 60, left: 40), // ajusta o padding para alinhar com o cabeçalho
+                                                      child: Row(
+                                                        children: [
+                                                          // Coluna Nome
+                                                          SizedBox(
+                                                            width: 120, // largura máxima do espaço do nome
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text(
+                                                                pokemon.name,
+                                                                style: GoogleFonts.bungee(
+                                                                  fontSize: 15, // tamanho base
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                          SizedBox(width: 60), // espaço entre nome e código
+
+                                                          // Coluna Código
+                                                          SizedBox(
+                                                            width: 60,
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown,
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text(
+                                                                pokemon.code,
+                                                                style: GoogleFonts.bungee(
+                                                                  fontSize: 15,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                      
                                                     ],
                                                   ),
                                                   
@@ -368,6 +514,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                             },
                                           );
                                         },
+
+                                        /* 
+                                          Botões Editar - Lista
+                                        */
 
                                         style: ElevatedButton.styleFrom(
                                           padding: EdgeInsets.zero,
@@ -379,7 +529,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                         child: const Icon(
                                           Icons.edit,
                                           size: 10,
-                                          color: Colors.white,
+                                          color: Color.fromARGB(255, 255, 255, 255),
                                         ),
                                       ),
                                     ),
@@ -397,7 +547,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Texto Pokemon
+          /*
+            Texto Pokemon
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -433,7 +586,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
  
-          // Texto Código
+          /*
+            Texto Código
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -469,7 +625,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Texto Situação
+          /* 
+            Texto Situação 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -505,7 +664,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Barra de botões
+          /* 
+            Barra de botões
+          */
+
           Align(
             child: Padding(
               padding: const EdgeInsets.only(top: 700), // ajuste a posição
@@ -520,7 +682,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Botão lista
+          /* 
+            Botão lista 
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -530,7 +695,27 @@ class _InicioScreenState extends State<InicioScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Pressionar
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ListaScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(-1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),  
+                    );
                   },
 
                   style: ElevatedButton.styleFrom(
@@ -551,7 +736,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Botão home
+          /* 
+            Botão home
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -582,7 +770,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Botão favoritos
+          /* 
+            Botão favoritos
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -592,7 +783,27 @@ class _InicioScreenState extends State<InicioScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Pressionar
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const FavoritosScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),  
+                    );
                   },
 
                   style: ElevatedButton.styleFrom(
@@ -613,7 +824,10 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
 
-          // Botão adicionar
+          /* 
+            Botão adicionar
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -623,7 +837,27 @@ class _InicioScreenState extends State<InicioScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Pressionar
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const AdicionarScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),  
+                    );
                   },
 
                   style: ElevatedButton.styleFrom(
@@ -643,7 +877,6 @@ class _InicioScreenState extends State<InicioScreen> {
               ),
             ),
           ),
-
 
         ],
       ),
