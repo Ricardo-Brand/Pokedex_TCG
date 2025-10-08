@@ -281,7 +281,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                           final pokemon = _pokemons[index];
                                           showDialog(
                                             context: context,
-                                            barrierDismissible: false, // não fecha clicando fora
+                                            barrierDismissible: true, // fecha clicando fora
                                             builder: (BuildContext context) {
                                               return Dialog(
                                                 backgroundColor: Colors.transparent, // deixa só o quadrado
@@ -464,6 +464,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                                           ],
                                                         ),
                                                       ),
+                                                      
+                                                      /* 
+                                                        Nome e Código pokémon
+                                                      */
                                                       
                                                      Padding(
                                                       padding: const EdgeInsets.only(top: 60, left: 40), // ajusta o padding para alinhar com o cabeçalho

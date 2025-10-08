@@ -54,27 +54,7 @@ class _CvtScreenState extends State<CvtScreen> {
                 height: screenWidth * 0.1,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const AdicionarScreen(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(-1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut;
-
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ),  
-                    );
+                    Navigator.pop(context); 
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
