@@ -83,6 +83,8 @@ class FavoritosScreen extends StatefulWidget {
 class _FavoritosScreenState extends State<FavoritosScreen> {
   List<PokemonCard> _pokemons = [];
   List<bool> isPressedList = []; // dentro do seu State
+  final TextEditingController _searchController = TextEditingController();
+  List<PokemonCard> _filteredPokemons = [];
 
   @override
   void initState() {
@@ -95,6 +97,23 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
     setState(() {
       _pokemons = pokemons;
       isPressedList = List<bool>.filled(_pokemons.length, false);
+      _filteredPokemons = pokemons; // exibe tudo inicialmente
+    });
+  }
+
+  void _searchPokemon(String query) {
+    query = query.trim().toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        _filteredPokemons = _pokemons;
+      } else {
+        _filteredPokemons = _pokemons.where((pokemon) {
+          final name = pokemon.name.toLowerCase();
+          final code = pokemon.code.toLowerCase();
+          return name.contains(query) || code.contains(query);
+        }).toList();
+      }
     });
   }
   
@@ -126,10 +145,12 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 200), // ajuste a posição
+              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360, // mantém o tamanho
                 child: TextField(
+                  controller: _searchController,           // adiciona o controlador
+                  onChanged: _searchPokemon,               // adiciona a função de busca
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -137,10 +158,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
                     ),
-                    suffixIcon: Icon(
-                      Icons.search
-                    ),
+                    suffixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   ),
                 ),
               ),
@@ -190,9 +211,9 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                         Expanded(
                           child: ListView.builder(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _pokemons.length,
+                            itemCount: _filteredPokemons.length,
                             itemBuilder: (context, index) {
-                              final pokemon = _pokemons[index];
+                              final pokemon = _filteredPokemons[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -248,6 +269,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                             showDialog(
                                               context: context,
                                               barrierDismissible: true,
+                                              barrierColor: Colors.black.withOpacity(0.75),
                                               builder: (context) {
                                                 return Material(
                                                   color: Colors.transparent,
@@ -627,8 +649,195 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             height: 30,  // altura
                                                             child: ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.pop(context); // fecha o quadrado
+                                                                showDialog(
+                                                                  context: context,
+                                                                  barrierDismissible: true,
+                                                                  barrierColor: Colors.black.withOpacity(0.75),
+                                                                  builder: (context) {
+                                                                    return Material(
+                                                                      color: Colors.transparent,
+                                                                      child: Center(
+                                                                        child: SizedBox(
+                                                                          width: 360,
+                                                                          height: 250,
+                                                                          child: Stack(
+                                                                            clipBehavior: Clip.none,
+                                                                            children: [
+
+                                                                              /*
+                                                                                Quadrado externo
+                                                                              */
+
+                                                                              Positioned(
+                                                                                top: 40,
+                                                                                left: 30,
+                                                                                child: Container(
+                                                                                  width: 300,
+                                                                                  height: 150,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: const Color(0xFFBEBEBE),
+                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+
+                                                                              /*
+                                                                                Quadrado interno
+                                                                              */
+
+                                                                              Positioned(
+                                                                                top: 70,
+                                                                                left: 55,
+                                                                                child: Container(
+                                                                                  width: 250,
+                                                                                  height: 75,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: Colors.white,
+                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+
+                                                                              /*
+                                                                                String dentro do quadrado interno 
+                                                                              */
+
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top: 100, left: 65), // ajusta o padding para alinhar com o cabeçalho
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    // Coluna Nome
+                                                                                    SizedBox(
+                                                                                      width: 250, // largura máxima do espaço do nome
+                                                                                      child: FittedBox(
+                                                                                        fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                                                                                        alignment: Alignment.centerLeft,
+                                                                                        child: Text(
+                                                                                          "COMENTÁRIO SALVO COM SUCESSO",
+                                                                                          style: GoogleFonts.bungee(
+                                                                                            fontSize: 12, // tamanho base
+                                                                                            color: Colors.black,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+
+                                                                              /*
+                                                                                Botão voltar
+                                                                              */
+
+                                                                              Positioned(
+                                                                                top: 152,
+                                                                                left: 148,
+                                                                                child: SizedBox(
+                                                                                  width: 60,
+                                                                                  height: 30,
+                                                                                  child: ElevatedButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    style: ElevatedButton.styleFrom(
+                                                                                      padding: EdgeInsets.zero,
+                                                                                      shape: RoundedRectangleBorder(
+                                                                                        borderRadius: BorderRadius.circular(20),
+                                                                                        side: const BorderSide(color: Colors.black, width: 2),
+                                                                                      ),
+                                                                                      backgroundColor: Colors.transparent,
+                                                                                      shadowColor: Colors.transparent,
+                                                                                    ),
+                                                                                    child: Ink(
+                                                                                      decoration: BoxDecoration(
+                                                                                        gradient: const LinearGradient(
+                                                                                          colors: [Color(0xFF00A32E), Color(0xFF007020), Color(0xFF003D11)],
+                                                                                          begin: Alignment.topCenter,
+                                                                                          end: Alignment.bottomCenter,
+                                                                                        ),
+                                                                                        borderRadius: BorderRadius.circular(8),
+                                                                                      ),
+                                                                                      child: const Center(
+                                                                                        child: Text(
+                                                                                          "Ok",
+                                                                                          style: TextStyle(fontSize: 14, color: Colors.white),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+
+
+                                                                              /*
+                                                                                Circulo vermelho 
+                                                                              */
+
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top: 45, left: 140),
+                                                                                child: Container(
+                                                                                  width: 13,
+                                                                                  height: 13,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: const Color.fromARGB(255, 255, 0, 0), // cor interna
+                                                                                    shape: BoxShape.circle,
+                                                                                    border: Border.all(
+                                                                                      color: Colors.black, // cor da borda
+                                                                                      width: 2, // espessura da borda
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+
+                                                                              /*
+                                                                                Circulo amarelo
+                                                                              */
+
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top: 45, left: 170),
+                                                                                child: Container(
+                                                                                  width: 13,
+                                                                                  height: 13,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: const Color.fromARGB(255, 255, 230, 0), // cor interna
+                                                                                    shape: BoxShape.circle,
+                                                                                    border: Border.all(
+                                                                                      color: Colors.black, // cor da borda
+                                                                                      width: 2, // espessura da borda
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+
+                                                                              /*
+                                                                                Circulo verde
+                                                                              */
+
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top: 45, left: 200),
+                                                                                child: Container(
+                                                                                  width: 13,
+                                                                                  height: 13,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: const Color.fromARGB(255, 55, 255, 0), // cor interna
+                                                                                    shape: BoxShape.circle,
+                                                                                    border: Border.all(
+                                                                                      color: Colors.black, // cor da borda
+                                                                                      width: 2, // espessura da borda
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
                                                               },
+
+                                                                      
                                                               style: ElevatedButton.styleFrom(
                                                                 padding: EdgeInsets.zero, // importante para preencher tudo
                                                                 shape: RoundedRectangleBorder(

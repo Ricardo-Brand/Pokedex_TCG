@@ -18,6 +18,8 @@ class InicioScreen extends StatefulWidget {
 class _InicioScreenState extends State<InicioScreen> {
   bool showDetails = false;
   List<PokemonCard> _pokemons = [];
+  final TextEditingController _searchController = TextEditingController();
+  List<PokemonCard> _filteredPokemons = [];
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _InicioScreenState extends State<InicioScreen> {
     final pokemons = await loadPokemonCards(); // função que lê o .txt
     setState(() {
       _pokemons = pokemons;
+      _filteredPokemons = pokemons; // exibe tudo inicialmente
     });
   }
 
@@ -42,6 +45,22 @@ class _InicioScreenState extends State<InicioScreen> {
       default:
         return "Trocado";
     }
+  }
+
+  void _searchPokemon(String query) {
+    query = query.trim().toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        _filteredPokemons = _pokemons;
+      } else {
+        _filteredPokemons = _pokemons.where((pokemon) {
+          final name = pokemon.name.toLowerCase();
+          final code = pokemon.code.toLowerCase();
+          return name.contains(query) || code.contains(query);
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -131,10 +150,12 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 200), // ajuste a posição
+              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360, // mantém o tamanho
                 child: TextField(
+                  controller: _searchController,           // adiciona o controlador
+                  onChanged: _searchPokemon,               // adiciona a função de busca
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -142,15 +163,16 @@ class _InicioScreenState extends State<InicioScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
                     ),
-                    suffixIcon: Icon(
-                      Icons.search
-                    ),
+                    suffixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   ),
                 ),
               ),
             ),
           ),
+          
 
           /* 
             Lista e seus ícones 
@@ -204,9 +226,9 @@ class _InicioScreenState extends State<InicioScreen> {
                         Expanded(
                           child: ListView.builder(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _pokemons.length,
+                            itemCount: _filteredPokemons.length,
                             itemBuilder: (context, index) {
-                               final pokemon = _pokemons[index];
+                               final pokemon =  _filteredPokemons[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -282,6 +304,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                           showDialog(
                                             context: context,
                                             barrierDismissible: true, // fecha clicando fora
+                                            barrierColor: Colors.black.withOpacity(0.75),
                                             builder: (BuildContext context) {
                                               return Dialog(
                                                 backgroundColor: Colors.transparent, // deixa só o quadrado
@@ -468,7 +491,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       /* 
                                                         Nome e Código pokémon
                                                       */
-                                                      
+
                                                      Padding(
                                                       padding: const EdgeInsets.only(top: 60, left: 40), // ajusta o padding para alinhar com o cabeçalho
                                                       child: Row(

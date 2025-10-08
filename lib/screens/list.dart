@@ -6,6 +6,13 @@ import 'inicio.dart';
 import 'adicionar.dart';
 import 'favoritos.dart';
 
+class PokemonEntry {
+  final PokemonCard pokemon;
+  int quantidade;
+
+  PokemonEntry(this.pokemon, this.quantidade);
+}
+
 class ListaScreen extends StatefulWidget {
   const ListaScreen({super.key});
 
@@ -14,10 +21,13 @@ class ListaScreen extends StatefulWidget {
 }
 
 class _ListaScreenState extends State<ListaScreen> {
-  List<PokemonCard> _pokemons = [];
-  List<int> _quantidades = [];
+  List<PokemonEntry> _entries = [];
   String _botaoTexto = "Nome";
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  List<PokemonEntry> _filteredEntries = [];
+
+
 
   @override
   void initState() {
@@ -26,38 +36,42 @@ class _ListaScreenState extends State<ListaScreen> {
   }
 
   Future<void> _loadPokemons() async {
-    final pokemons = await loadPokemonCards(); // função que lê o .txt
+    final pokemons = await loadPokemonCards();
     setState(() {
-      _pokemons = pokemons;
-      _quantidades = List<int>.filled(_pokemons.length, 0);
+      _entries = pokemons.map((p) => PokemonEntry(p, 0)).toList();
+      _filteredEntries = List.from(_entries);
+    });
+  }
+
+  void _searchPokemon(String query) {
+    query = query.trim().toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredEntries = List.from(_entries);
+      } else {
+        _filteredEntries = _entries.where((entry) {
+          final name = entry.pokemon.name.toLowerCase();
+          final code = entry.pokemon.code.toLowerCase();
+          return name.contains(query) || code.contains(query);
+        }).toList();
+      }
     });
   }
 
   void _ordenarLista() {
-    final indices = List.generate(_pokemons.length, (i) => i);
-
     if (_botaoTexto == "Quantidade") {
-      indices.sort((a, b) {
-        if (_quantidades[b] != _quantidades[a]) {
-          return _quantidades[b].compareTo(_quantidades[a]); // maior quantidade primeiro
+      _entries.sort((a, b) {
+        if (b.quantidade != a.quantidade) {
+          return b.quantidade.compareTo(a.quantidade);
         }
-        return _pokemons[a].name.toLowerCase().compareTo(_pokemons[b].name.toLowerCase());
+        return a.pokemon.name.toLowerCase().compareTo(b.pokemon.name.toLowerCase());
       });
     } else {
-      indices.sort((a, b) => _pokemons[a].name.toLowerCase().compareTo(_pokemons[b].name.toLowerCase()));
+      _entries.sort((a, b) => a.pokemon.name.toLowerCase().compareTo(b.pokemon.name.toLowerCase()));
     }
 
-    // Reorganiza _pokemons e _quantidades em-place usando a lista de índices
-    final newPokemons = List<PokemonCard>.filled(_pokemons.length, _pokemons[0]);
-    final newQuantidades = List<int>.filled(_quantidades.length, 0);
-
-    for (int i = 0; i < indices.length; i++) {
-      newPokemons[i] = _pokemons[indices[i]];
-      newQuantidades[i] = _quantidades[indices[i]];
-    }
-
-    _pokemons = newPokemons;
-    _quantidades = newQuantidades;
+    // Reatualiza o filtro também
+    _searchPokemon(_searchController.text);
 
     _scrollController.jumpTo(0.0);
   }
@@ -96,10 +110,12 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 200), // ajuste a posição
+              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360, // mantém o tamanho
                 child: TextField(
+                  controller: _searchController,           // adiciona o controlador
+                  onChanged: _searchPokemon,               // adiciona a função de busca
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -107,10 +123,10 @@ class _ListaScreenState extends State<ListaScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
                     ),
-                    suffixIcon: Icon(
-                      Icons.search
-                    ),
+                    suffixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   ),
                 ),
               ),
@@ -161,9 +177,10 @@ class _ListaScreenState extends State<ListaScreen> {
                           child: ListView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _pokemons.length,
+                            itemCount: _filteredEntries.length,
                             itemBuilder: (context, index) {
-                              final pokemon = _pokemons[index];
+                              final entry = _filteredEntries[index];
+                              final pokemon = entry.pokemon;
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -228,8 +245,8 @@ class _ListaScreenState extends State<ListaScreen> {
                                               child: IconButton(
                                                 onPressed: () {
                                                   setState(() {
-                                                    if (_quantidades[index] > 0) {
-                                                      _quantidades[index]--;
+                                                    if (entry.quantidade > 0) {
+                                                      entry.quantidade--;
                                                     }
                                                   });
                                                 },
@@ -252,7 +269,7 @@ class _ListaScreenState extends State<ListaScreen> {
                                           Align(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              _quantidades[index].toString().padLeft(3, '0'),
+                                              entry.quantidade.toString().padLeft(3, '0'),
                                               style: GoogleFonts.bungee(
                                                 textStyle: const TextStyle(
                                                   fontSize: 16,
@@ -275,7 +292,7 @@ class _ListaScreenState extends State<ListaScreen> {
                                               child: IconButton(
                                                 onPressed: () {
                                                   setState(() {
-                                                    _quantidades[index]++;
+                                                    entry.quantidade++;
                                                   });
                                                 },
                                                 icon: const Icon(Icons.add,

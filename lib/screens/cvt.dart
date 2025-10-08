@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
-import 'adicionar.dart';
 import 'inicio.dart';
 
 class CvtScreen extends StatefulWidget {

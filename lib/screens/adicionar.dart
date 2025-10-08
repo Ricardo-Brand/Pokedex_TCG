@@ -16,6 +16,8 @@ class AdicionarScreen extends StatefulWidget {
 
 class _AdicionarScreenState extends State<AdicionarScreen> {
   List<PokemonCard> _pokemons = [];
+  final TextEditingController _searchController = TextEditingController();
+  List<PokemonCard> _filteredPokemons = [];
 
   @override
   void initState() {
@@ -27,6 +29,23 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
     final pokemons = await loadPokemonCards(); // função que lê o .txt
     setState(() {
       _pokemons = pokemons;
+      _filteredPokemons = pokemons;
+    });
+  }
+
+  void _searchPokemon(String query) {
+    query = query.trim().toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        _filteredPokemons = _pokemons;
+      } else {
+        _filteredPokemons = _pokemons.where((pokemon) {
+          final name = pokemon.name.toLowerCase();
+          final code = pokemon.code.toLowerCase();
+          return name.contains(query) || code.contains(query);
+        }).toList();
+      }
     });
   }
 
@@ -38,7 +57,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          
+
           /*
             Fundo e Título 
           */
@@ -58,10 +77,12 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 200), // ajuste a posição
+              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360, // mantém o tamanho
                 child: TextField(
+                  controller: _searchController,           // adiciona o controlador
+                  onChanged: _searchPokemon,               // adiciona a função de busca
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -69,10 +90,10 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
                     ),
-                    suffixIcon: Icon(
-                      Icons.search
-                    ),
+                    suffixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   ),
                 ),
               ),
@@ -123,9 +144,9 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                         Expanded(
                           child: ListView.builder(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _pokemons.length,
+                            itemCount: _filteredPokemons.length,
                             itemBuilder: (context, index) {
-                              final pokemon = _pokemons[index];
+                              final pokemon = _filteredPokemons[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
