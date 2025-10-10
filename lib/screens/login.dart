@@ -14,6 +14,42 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final RegExp _emailRegex = RegExp(r'^[A-Za-z]{3,}@[A-Za-z]{3,}\.[A-Za-z]{3,}$');
+
+  void _validateInputs() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (!_emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email inválido. Deve ter formato: aaa@bbb.ccc'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('A senha não pode estar em branco.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Login válido!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SizedBox(
                 width: 360, // largura do campo
                 child: TextField(
+                  controller: _emailController,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -113,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SizedBox(
                 width: 360,
                 child: TextField(
+                  controller: _passwordController,
                   textAlign: TextAlign.center,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
@@ -195,28 +233,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 45,
                 child: ElevatedButton(
                    onPressed: () {
-                  // Navegar para a tela LoginScreen com animação personalizada
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => const InicioScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        // Define de onde a tela nova vai começar
-                        const begin = Offset(1.0, 0.0); // 1.0 = fora da tela pela DIREITA
-                        const end = Offset.zero;        // 0.0 = posição normal
-                        const curve = Curves.easeInOut; // curva suave
+                    final email = _emailController.text.trim();
+                    final password = _passwordController.text.trim();
+                    final RegExp emailRegex = RegExp(r'^[A-Za-z]{3,}@[A-Za-z]{3,}\.[A-Za-z]{3,}$');
 
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
+                    if (!emailRegex.hasMatch(email)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text('Email inválido. Use o formato xxx@gmail.com'),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return; // ❌ para aqui, não navega
+                    }
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                },
+                    if (password.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text('Senha incorreta'),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return; // ❌ também para aqui
+                    }
+
+                    // ✅ Se tudo estiver certo, navega normalmente
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const InicioScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFE1000C), // cor do botão
                     shape: RoundedRectangleBorder(
