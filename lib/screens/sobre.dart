@@ -20,11 +20,14 @@ class SobreScreen extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(),
-              child: const PokedexTitle(), // aqui entra o const
+              child: const PokedexTitle(),
             ),
           ),
 
-          // Botão circular voltar
+          /*
+            Botão circular voltar
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -74,7 +77,10 @@ class SobreScreen extends StatelessWidget {
             ),
           ),
 
-          // Texto descritivo
+          /*
+            Texto descritivo
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -111,7 +117,10 @@ class SobreScreen extends StatelessWidget {
             ),
           ),
 
-          // Autores
+          /*
+            Autores
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(

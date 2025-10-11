@@ -10,9 +10,13 @@ class PokedexTitle extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Stack(
-      fit: StackFit.expand, // garante que ocupe toda a tela
+      fit: StackFit.expand,
       children: [
-        // Fundo cobrindo toda a tela
+        
+        /*
+          Fundo cobrindo toda a tela
+        */
+
         Opacity(
           opacity: 0.9, // 50% de transparência
           child: Image.asset(
@@ -20,14 +24,22 @@ class PokedexTitle extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // Título centralizado no topo
+
+        /*
+          Título centralizado no topo
+        */
+         
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
             padding: EdgeInsets.only(top: screenHeight * 0.08),
             child: Stack(
               children: [
-                // Stroke (contorno branco)
+
+                /*
+                  Stroke (contorno branco)
+                */ 
+
                 Text(
                   'Pokédex\nTCG',
                   textAlign: TextAlign.center,
@@ -40,7 +52,11 @@ class PokedexTitle extends StatelessWidget {
                       ..color = Colors.white,
                   ),
                 ),
-                // Texto preenchido (vermelho)
+
+                /*
+                  Texto preenchido (vermelho)
+                */
+                 
                 Text(
                   'Pokédex\nTCG',
                   textAlign: TextAlign.center,

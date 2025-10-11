@@ -81,7 +81,7 @@ class _InicioScreenState extends State<InicioScreen> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(),
-              child: const PokedexTitle(), // aqui entra o const
+              child: const PokedexTitle(),
             ),
           ),
 
@@ -131,7 +131,7 @@ class _InicioScreenState extends State<InicioScreen> {
                   ),
                   child: Transform(
                     alignment: Alignment.center,
-                    transform: Matrix4.rotationY(3.14159), // espelha o ícone
+                    transform: Matrix4.rotationY(3.14159),
                     child: const Icon(
                       Icons.logout,
                       color: Colors.white,
@@ -150,12 +150,12 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
+              padding: const EdgeInsets.only(top: 200),
               child: SizedBox(
-                width: 360, // mantém o tamanho
+                width: 360,
                 child: TextField(
-                  controller: _searchController,           // adiciona o controlador
-                  onChanged: _searchPokemon,               // adiciona a função de busca
+                  controller: _searchController,
+                  onChanged: _searchPokemon,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -163,7 +163,7 @@ class _InicioScreenState extends State<InicioScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
+                      borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     suffixIcon: const Icon(Icons.search),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
@@ -239,7 +239,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                     */
 
                                     SizedBox(
-                                      width: 120, // largura fixa
+                                      width: 120,
                                       child: Text(
                                         pokemon.name,
                                          style: GoogleFonts.bungee(
@@ -251,7 +251,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                       ),
                                     ),
 
-                                    SizedBox(width: 8), // espaço entre colunas
+                                    SizedBox(width: 8),
 
                                     /* 
                                       Coluna 2 - Código 
@@ -303,17 +303,17 @@ class _InicioScreenState extends State<InicioScreen> {
                                           final pokemon = _pokemons[index];
                                           showDialog(
                                             context: context,
-                                            barrierDismissible: true, // fecha clicando fora
+                                            barrierDismissible: true,
                                             barrierColor: Colors.black.withOpacity(0.75),
                                             builder: (BuildContext context) {
                                               return Dialog(
-                                                backgroundColor: Colors.transparent, // deixa só o quadrado
-                                                insetPadding: EdgeInsets.all(20), // margem nas bordas
+                                                backgroundColor: Colors.transparent, 
+                                                insetPadding: EdgeInsets.all(20), 
                                                 child: Container(
                                                   width: 600,
                                                   height: 250,
                                                   decoration: BoxDecoration(
-                                                    color: Color(0xFFD9D9D9), // cor do quadrado
+                                                    color: Color(0xFFD9D9D9),
                                                     borderRadius: BorderRadius.circular(20),
                                                   ),
 
@@ -325,13 +325,13 @@ class _InicioScreenState extends State<InicioScreen> {
                                                     children: [
                                                       // linha do meio
                                                       Positioned(
-                                                        left: 170, // centraliza a linha, 1 é a metade da largura da linha
+                                                        left: 170, 
                                                         top: 0,
                                                         bottom: 150,
                                                         child: Container(
-                                                          width: 6, // largura da linha
+                                                          width: 6,
                                                           height: 0,
-                                                          color: Color(0xFFA4A4A4), // cor da linha
+                                                          color: Color(0xFFA4A4A4), 
                                                         ),
                                                       ),
 
@@ -340,19 +340,19 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       */
 
                                                       Positioned(
-                                                        top: 200,    // distância do topo do quadrado
-                                                        right: 130,  // distância da direita
+                                                        top: 200,    
+                                                        right: 130,  
                                                         child: SizedBox(
-                                                          width: 100,  // largura
-                                                          height: 40,  // altura
+                                                          width: 100,  
+                                                          height: 40,  
                                                           child: ElevatedButton(
                                                             onPressed: () {
-                                                              Navigator.pop(context); // fecha o quadrado
+                                                              Navigator.pop(context); 
                                                             },
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFF1E1E1E),
                                                               shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                                                                borderRadius: BorderRadius.circular(20), 
                                                               ),
                                                             ),
                                                             child: Text(
@@ -373,19 +373,19 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       */ 
 
                                                       Positioned(
-                                                        top: 150,    // distância do topo do quadrado
-                                                        right: 195,  // distância da direita
+                                                        top: 150,    
+                                                        right: 195,  
                                                         child: SizedBox(
-                                                          width: 120,  // largura
-                                                          height: 40,  // altura
+                                                          width: 120,  
+                                                          height: 40,  
                                                           child: ElevatedButton(
                                                             onPressed: () {
-                                                              Navigator.pop(context); // fecha o quadrado
+                                                              Navigator.pop(context); 
                                                             },
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFFC00F0C),
                                                               shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                                                                borderRadius: BorderRadius.circular(20), 
                                                               ),
                                                             ),
                                                             child: Text(
@@ -406,11 +406,11 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       */         
                                                     
                                                       Positioned(
-                                                        top: 150,    // distância do topo do quadrado
-                                                        right: 40,  // distância da direita
+                                                        top: 150,    
+                                                        right: 40,  
                                                         child: SizedBox(
-                                                          width: 120,  // largura
-                                                          height: 40,  // altura
+                                                          width: 120,  
+                                                          height: 40,  
                                                           child: ElevatedButton(
                                                             onPressed: () {
                                                               final selectedPokemon = _pokemons[index];
@@ -440,7 +440,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFFC00F0C),
                                                               shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                                                                borderRadius: BorderRadius.circular(20), 
                                                               ),
                                                             ),
                                                             child: Text(
@@ -461,7 +461,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       */
 
                                                       Padding(
-                                                        padding: EdgeInsets.all(0), // espaço ao redor da linha
+                                                        padding: EdgeInsets.all(0),
                                                         child: Row(
                                                           children: [
                                                             SizedBox(width: 40),
@@ -474,7 +474,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            SizedBox(width: 60), // define a distância entre os textos
+                                                            SizedBox(width: 60),
                                                             Text(
                                                               'Código',
                                                               style: GoogleFonts.bungee(
@@ -493,28 +493,35 @@ class _InicioScreenState extends State<InicioScreen> {
                                                       */
 
                                                      Padding(
-                                                      padding: const EdgeInsets.only(top: 60, left: 40), // ajusta o padding para alinhar com o cabeçalho
+                                                      padding: const EdgeInsets.only(top: 60, left: 40), 
                                                       child: Row(
                                                         children: [
-                                                          // Coluna Nome
+
+                                                          /*
+                                                            Coluna Nome
+                                                          */ 
+
                                                           SizedBox(
-                                                            width: 120, // largura máxima do espaço do nome
+                                                            width: 120,
                                                             child: FittedBox(
-                                                              fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                                                              fit: BoxFit.scaleDown, 
                                                               alignment: Alignment.centerLeft,
                                                               child: Text(
                                                                 pokemon.name,
                                                                 style: GoogleFonts.bungee(
-                                                                  fontSize: 15, // tamanho base
+                                                                  fontSize: 15, 
                                                                   color: Colors.black,
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
 
-                                                          SizedBox(width: 60), // espaço entre nome e código
+                                                          SizedBox(width: 60),
 
-                                                          // Coluna Código
+                                                          /*
+                                                            Coluna Código
+                                                          */ 
+
                                                           SizedBox(
                                                             width: 60,
                                                             child: FittedBox(
@@ -697,10 +704,10 @@ class _InicioScreenState extends State<InicioScreen> {
 
           Align(
             child: Padding(
-              padding: const EdgeInsets.only(top: 700), // ajuste a posição
+              padding: const EdgeInsets.only(top: 700), 
               child: Container(
-                width: 350,  // largura do quadrado
-                height: 55, // altura do quadrado
+                width: 350,  
+                height: 55,
                 decoration: BoxDecoration(
                   color: Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.circular(80),
@@ -716,7 +723,7 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 270), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 270), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -746,10 +753,10 @@ class _InicioScreenState extends State<InicioScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white, 
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -770,7 +777,7 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 90), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 90), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -780,10 +787,10 @@ class _InicioScreenState extends State<InicioScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 0, 0), // cor interna do botão
-                    side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2), // borda preta
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0), 
+                    side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -804,7 +811,7 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 95), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 95), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -834,10 +841,10 @@ class _InicioScreenState extends State<InicioScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white, 
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -858,7 +865,7 @@ class _InicioScreenState extends State<InicioScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 275), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 275), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -888,10 +895,10 @@ class _InicioScreenState extends State<InicioScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white, 
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),

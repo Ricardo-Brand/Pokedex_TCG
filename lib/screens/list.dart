@@ -99,7 +99,7 @@ class _ListaScreenState extends State<ListaScreen> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(),
-              child: const PokedexTitle(), // aqui entra o const
+              child: const PokedexTitle(),
             ),
           ),
 
@@ -110,12 +110,12 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
+              padding: const EdgeInsets.only(top: 200),
               child: SizedBox(
-                width: 360, // mantém o tamanho
+                width: 360,
                 child: TextField(
-                  controller: _searchController,           // adiciona o controlador
-                  onChanged: _searchPokemon,               // adiciona a função de busca
+                  controller: _searchController,          
+                  onChanged: _searchPokemon,           
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -123,7 +123,7 @@ class _ListaScreenState extends State<ListaScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
+                      borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     suffixIcon: const Icon(Icons.search),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
@@ -412,10 +412,7 @@ class _ListaScreenState extends State<ListaScreen> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    // Alterna texto
                     _botaoTexto = _botaoTexto == "Quantidade" ? "Nome" : "Quantidade";
-
-                    // Ordena a lista conforme o modo atual
                     _ordenarLista();
                   });
                 },
@@ -450,16 +447,17 @@ class _ListaScreenState extends State<ListaScreen> {
               ),
             ),
           ),
+
           /* 
             Barra de botões
           */
 
           Align(
             child: Padding(
-              padding: const EdgeInsets.only(top: 700), // ajuste a posição
+              padding: const EdgeInsets.only(top: 700), 
               child: Container(
-                width: 350,  // largura do quadrado
-                height: 55, // altura do quadrado
+                width: 350,  
+                height: 55, 
                 decoration: BoxDecoration(
                   color: Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.circular(80),
@@ -475,7 +473,7 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 270), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 270), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -485,10 +483,10 @@ class _ListaScreenState extends State<ListaScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 0, 0), // cor interna do botão
-                    side: const BorderSide(color: Color.fromRGBO(255, 255, 255, 1), width: 2), // borda preta
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0), 
+                    side: const BorderSide(color: Color.fromRGBO(255, 255, 255, 1), width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -509,7 +507,7 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 90), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 90),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -539,10 +537,10 @@ class _ListaScreenState extends State<ListaScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255), // cor interna do botão
-                    side: const BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2), // borda preta
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255), 
+                    side: const BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -563,7 +561,7 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 95), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 95),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -593,10 +591,10 @@ class _ListaScreenState extends State<ListaScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white, 
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -617,7 +615,7 @@ class _ListaScreenState extends State<ListaScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 275), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 275),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -647,10 +645,10 @@ class _ListaScreenState extends State<ListaScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white, 
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),

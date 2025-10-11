@@ -36,7 +36,7 @@ Future<List<PokemonCard>> loadPokemonCards() async {
     }
   }
 
-  // 🔹 Ordena em ordem alfabética pelo nome
+  // Ordena em ordem alfabética pelo nome
   pokemons.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
   return pokemons;

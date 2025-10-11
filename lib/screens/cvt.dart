@@ -33,7 +33,7 @@ class _CvtScreenState extends State<CvtScreen> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(),
-              child: const PokedexTitle(), // aqui entra o const
+              child: const PokedexTitle(),
             ),
           ),
 
@@ -104,7 +104,7 @@ class _CvtScreenState extends State<CvtScreen> {
                     ),
 
                     Padding(
-                      padding: EdgeInsets.all(0), // espaço ao redor da linha
+                      padding: EdgeInsets.all(0),
                       child: Row(
                         children: [
                           SizedBox(width: 40),
@@ -117,7 +117,7 @@ class _CvtScreenState extends State<CvtScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 65), // define a distância entre os textos
+                          SizedBox(width: 65),
                           Text(
                             'Código',
                             style: GoogleFonts.bungee(
@@ -132,28 +132,35 @@ class _CvtScreenState extends State<CvtScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.only(top: 60, left: 40), // ajusta o padding para alinhar com o cabeçalho
+                      padding: const EdgeInsets.only(top: 60, left: 40), 
                       child: Row(
                         children: [
-                          // Coluna Nome
+
+                          /*
+                            Coluna Nome
+                          */ 
+
                           SizedBox(
-                            width: 120, // largura máxima do espaço do nome
+                            width: 120,
                             child: FittedBox(
-                              fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                              fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 pokemon.name,
                                 style: GoogleFonts.bungee(
-                                  fontSize: 15, // tamanho base
+                                  fontSize: 15,
                                   color: Colors.black,
                                 ),
                               ),
                             ),
                           ),
 
-                          SizedBox(width: 60), // espaço entre nome e código
+                          SizedBox(width: 60),
 
-                          // Coluna Código
+                          /*
+                            Coluna Código
+                          */
+
                           SizedBox(
                             width: 60,
                             child: FittedBox(
@@ -183,11 +190,11 @@ class _CvtScreenState extends State<CvtScreen> {
           */
 
           Positioned(
-            top: 450,    // distância do topo do quadrado
+            top: 450,
             left: 22,
             child: SizedBox(
-              width: 350,  // largura
-              height: 50,  // altura
+              width: 350,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -215,7 +222,7 @@ class _CvtScreenState extends State<CvtScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 110, 110, 110),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
@@ -236,11 +243,11 @@ class _CvtScreenState extends State<CvtScreen> {
           */
 
           Positioned(
-            top: 550,    // distância do topo do quadrado
+            top: 550,
             left: 22,
             child: SizedBox(
-              width: 350,  // largura
-              height: 50,  // altura
+              width: 350,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -268,7 +275,7 @@ class _CvtScreenState extends State<CvtScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 110, 110, 110)
 ,                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
@@ -289,11 +296,11 @@ class _CvtScreenState extends State<CvtScreen> {
           */
 
           Positioned(
-            top: 650,    // distância do topo do quadrado
+            top: 650,
             left: 22,
             child: SizedBox(
-              width: 350,  // largura
-              height: 50,  // altura
+              width: 350,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -321,7 +328,7 @@ class _CvtScreenState extends State<CvtScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 110, 110, 110),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // aqui você define o radius
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(

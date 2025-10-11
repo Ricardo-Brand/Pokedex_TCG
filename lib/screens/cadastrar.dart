@@ -79,7 +79,7 @@ class _CadastrarScreenState extends State<CadastrarScreen> {
       return;
     }
 
-    // ✅ Criação do usuário (único)
+    // Criação do usuário (único)
     try {
       Usuario.criar(
         nome: nome,
@@ -90,25 +90,24 @@ class _CadastrarScreenState extends State<CadastrarScreen> {
 
       _mostrarSnackBar('Usuário cadastrado com sucesso!', sucesso: true);
 
-      // ✅ Após cadastrar, navega para a tela de login após 2 segundos
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const LoginScreen(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              const begin = Offset(-1.0, 0.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-              var tween = Tween(begin: begin, end: end)
-                  .chain(CurveTween(curve: curve));
-              return SlideTransition(position: animation.drive(tween), child: child);
-            },
-          ),
-        );
-      });
+      // Após cadastrar, navega para a tela de login após 0 segundos
+
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LoginScreen(),
+          transitionsBuilder:
+              (context, animation, secondaryAnimation, child) {
+            const begin = Offset(-1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+            var tween = Tween(begin: begin, end: end)
+                .chain(CurveTween(curve: curve));
+            return SlideTransition(position: animation.drive(tween), child: child);
+          },
+        ),
+      );
     } catch (e) {
       _mostrarSnackBar('Erro ao cadastrar usuário.');
     }

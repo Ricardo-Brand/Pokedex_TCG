@@ -93,11 +93,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
   }
 
   Future<void> _loadPokemons() async {
-    final pokemons = await loadPokemonCards(); // função que lê o .txt
+    final pokemons = await loadPokemonCards();
     setState(() {
       _pokemons = pokemons;
       isPressedList = List<bool>.filled(_pokemons.length, false);
-      _filteredPokemons = pokemons; // exibe tudo inicialmente
+      _filteredPokemons = pokemons;
     });
   }
 
@@ -134,7 +134,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(),
-              child: const PokedexTitle(), // aqui entra o const
+              child: const PokedexTitle(),
             ),
           ),
 
@@ -145,12 +145,12 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.only(top: 200), // mantém o mesmo posicionamento
+              padding: const EdgeInsets.only(top: 200),
               child: SizedBox(
                 width: 360, // mantém o tamanho
                 child: TextField(
-                  controller: _searchController,           // adiciona o controlador
-                  onChanged: _searchPokemon,               // adiciona a função de busca
+                  controller: _searchController,
+                  onChanged: _searchPokemon,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
@@ -158,7 +158,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey.shade400), // borda igual à do primeiro
+                      borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     suffixIcon: const Icon(Icons.search),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
@@ -221,7 +221,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                     const SizedBox(width: 10),
 
                                     /*
-                                    Coluna 1 - Nome
+                                      Coluna 1 - Nome
                                     */ 
 
                                     SizedBox(
@@ -239,7 +239,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                     const SizedBox(width: 55),
                                     
                                     /*
-                                    Coluna 2 - Código
+                                      Coluna 2 - Código
                                     */
                                     
                                     SizedBox(
@@ -256,7 +256,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                     ),
 
                                     /*
-                                    Coluna 3 - Botão comentário
+                                      Coluna 3 - Botão comentário
                                     */
 
                                     Padding(
@@ -283,7 +283,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */ 
 
                                                         Container(
-                                                          width: 380, // ultrapassa os 350 do Container
+                                                          width: 380,
                                                           height: 360,
                                                           decoration: BoxDecoration(
                                                             color: Color(0xFFBEBEBE),
@@ -296,7 +296,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */ 
 
                                                         Padding(
-                                                          padding: const EdgeInsets.only(top: 70, left: 10), // ajuste a posição
+                                                          padding: const EdgeInsets.only(top: 70, left: 10),
                                                           child: Container(
                                                             width: 360,
                                                             height: 200,
@@ -324,19 +324,23 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */
                                                           
                                                         Padding(
-                                                          padding: const EdgeInsets.only(top: 5, left: 110), // ajusta o padding para alinhar com o cabeçalho
+                                                          padding: const EdgeInsets.only(top: 5, left: 110),
                                                           child: Row(
                                                             children: [
-                                                              // Coluna Nome
+
+                                                              /*
+                                                                Coluna Nome
+                                                              */
+
                                                               SizedBox(
-                                                                width: 150, // largura máxima do espaço do nome
+                                                                width: 150,
                                                                 child: FittedBox(
-                                                                  fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                                                                  fit: BoxFit.scaleDown,
                                                                   alignment: Alignment.centerLeft,
                                                                   child: Text(
                                                                     "Comentário",
                                                                     style: GoogleFonts.bungee(
-                                                                      fontSize: 40, // tamanho base
+                                                                      fontSize: 40,
                                                                       color: Colors.black,
                                                                     ),
                                                                   ),
@@ -351,10 +355,14 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */
                                                         
                                                         Padding(
-                                                          padding: const EdgeInsets.only(top: 30, left: 90), // mesmo left do comentário
+                                                          padding: const EdgeInsets.only(top: 30, left: 90),
                                                           child: Row(
                                                             children: [
-                                                              // Nome do Pokémon
+
+                                                              /*
+                                                                Nome do Pokémon
+                                                              */ 
+
                                                               Stack(
                                                                 children: [
                                                                   Text(
@@ -386,10 +394,14 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */
 
                                                         Padding(
-                                                          padding: const EdgeInsets.only(top: 30, left: 230), // mesmo left do comentário
+                                                          padding: const EdgeInsets.only(top: 30, left: 230),
                                                           child: Row(
                                                             children: [
-                                                              // Nome do Pokémon
+
+                                                              /*
+                                                                Nome do Pokémon
+                                                              */
+
                                                               Stack(
                                                                 children: [
                                                                   Text(
@@ -437,11 +449,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             width: 13,
                                                             height: 13,
                                                             decoration: BoxDecoration(
-                                                              color: const Color.fromARGB(255, 255, 0, 0), // cor interna
+                                                              color: const Color.fromARGB(255, 255, 0, 0),
                                                               shape: BoxShape.circle,
                                                               border: Border.all(
-                                                                color: Colors.black, // cor da borda
-                                                                width: 2, // espessura da borda
+                                                                color: Colors.black, 
+                                                                width: 2, 
                                                               ),
                                                             ),
                                                           ),
@@ -457,11 +469,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             width: 13,
                                                             height: 13,
                                                             decoration: BoxDecoration(
-                                                              color: const Color.fromARGB(255, 255, 230, 0), // cor interna
+                                                              color: const Color.fromARGB(255, 255, 230, 0),
                                                               shape: BoxShape.circle,
                                                               border: Border.all(
-                                                                color: Colors.black, // cor da borda
-                                                                width: 2, // espessura da borda
+                                                                color: Colors.black,
+                                                                width: 2, 
                                                               ),
                                                             ),
                                                           ),
@@ -477,11 +489,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             width: 13,
                                                             height: 13,
                                                             decoration: BoxDecoration(
-                                                              color: const Color.fromARGB(255, 55, 255, 0), // cor interna
+                                                              color: const Color.fromARGB(255, 55, 255, 0),
                                                               shape: BoxShape.circle,
                                                               border: Border.all(
-                                                                color: Colors.black, // cor da borda
-                                                                width: 2, // espessura da borda
+                                                                color: Colors.black,
+                                                                width: 2,
                                                               ),
                                                             ),
                                                           ),
@@ -497,23 +509,23 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             width: 45,
                                                             height: 45,
                                                             decoration: BoxDecoration(
-                                                              color: const Color(0xFF696969), // cor interna
+                                                              color: const Color(0xFF696969),
                                                               shape: BoxShape.circle,
                                                               border: Border.all(
-                                                                color: Colors.black, // cor da borda
-                                                                width: 8, // espessura da borda
+                                                                color: Colors.black,
+                                                                width: 8,
                                                               ),
                                                             ),
                                                           ),
                                                         ),
 
                                                         /*
-                                                          Barra preta inferior vertical
+                                                          Barra preta inferior
                                                         */
 
                                                         Positioned(
-                                                          top: 295,    // distância do topo do Stack
-                                                          left: 320,   // distância da esquerda do Stack
+                                                          top: 295,
+                                                          left: 320,
                                                           child: Container(
                                                             width: 20, 
                                                             height: 50,
@@ -529,8 +541,8 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */
 
                                                         Positioned(
-                                                          top: 311,    // distância do topo do Stack
-                                                          left: 305,   // distância da esquerda do Stack
+                                                          top: 311,
+                                                          left: 305,
                                                           child: Container(
                                                             width: 50, 
                                                             height: 20,
@@ -551,7 +563,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             width: 20,
                                                             height: 20,
                                                             decoration: BoxDecoration(
-                                                              color: const Color(0xFF2E2E2E), // cor interna
+                                                              color: const Color(0xFF2E2E2E),
                                                               shape: BoxShape.circle,
                                                             ),
                                                           ),
@@ -562,8 +574,8 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */
 
                                                         Positioned(
-                                                          top: 295,    // distância do topo do Stack
-                                                          left: 90,   // distância da esquerda do Stack
+                                                          top: 295,
+                                                          left: 90,
                                                           child: Container(
                                                             width: 200,
                                                             height: 50,
@@ -579,26 +591,26 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */ 
 
                                                         Positioned(
-                                                          top: 305,    // distância do topo do quadrado
-                                                          right: 215,  // distância da direita
+                                                          top: 305,
+                                                          right: 215,
                                                           child: SizedBox(
-                                                            width: 60,  // largura
-                                                            height: 30,  // altura
+                                                            width: 60,
+                                                            height: 30,
                                                             child: ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.pop(context); // fecha o quadrado
+                                                                Navigator.pop(context);
                                                               },
                                                               style: ElevatedButton.styleFrom(
-                                                                padding: EdgeInsets.zero, // importante para preencher tudo
+                                                                padding: EdgeInsets.zero, 
                                                                 shape: RoundedRectangleBorder(
                                                                   borderRadius: BorderRadius.circular(20),
-                                                                  side: const BorderSide( // borda preta
+                                                                  side: const BorderSide(
                                                                     color: Colors.black,
                                                                     width: 2,
                                                                   ),
                                                                 ),
-                                                                backgroundColor: Colors.transparent, // transparente para mostrar o gradiente
-                                                                shadowColor: Colors.transparent, // remove sombra
+                                                                backgroundColor: Colors.transparent,
+                                                                shadowColor: Colors.transparent,
                                                               ).copyWith(
                                                                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
                                                                 surfaceTintColor: WidgetStateProperty.all(Colors.transparent),
@@ -608,9 +620,9 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                 decoration: BoxDecoration(
                                                                   gradient: const LinearGradient(
                                                                     colors: [
-                                                                      Color(0xFFFF0000), // vermelho topo
-                                                                      Colors.black,      // preto meio
-                                                                      Color(0xFFFF0000), // vermelho embaixo
+                                                                      Color(0xFFFF0000), 
+                                                                      Colors.black, 
+                                                                      Color(0xFFFF0000),
                                                                     ],
                                                                     begin: Alignment.topCenter,
                                                                     end: Alignment.bottomCenter,
@@ -642,11 +654,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                         */ 
 
                                                         Positioned(
-                                                          top: 305,    // distância do topo do quadrado
-                                                          right: 105,  // distância da direita
+                                                          top: 305,
+                                                          right: 105,
                                                           child: SizedBox(
-                                                            width: 60,  // largura
-                                                            height: 30,  // altura
+                                                            width: 60,
+                                                            height: 30,
                                                             child: ElevatedButton(
                                                               onPressed: () {
                                                                 showDialog(
@@ -703,19 +715,23 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                               */
 
                                                                               Padding(
-                                                                                padding: const EdgeInsets.only(top: 100, left: 65), // ajusta o padding para alinhar com o cabeçalho
+                                                                                padding: const EdgeInsets.only(top: 100, left: 65),
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    // Coluna Nome
+
+                                                                                    /*
+                                                                                      Coluna Nome
+                                                                                    */ 
+
                                                                                     SizedBox(
-                                                                                      width: 250, // largura máxima do espaço do nome
+                                                                                      width: 250,
                                                                                       child: FittedBox(
-                                                                                        fit: BoxFit.scaleDown, // reduz o tamanho da fonte se ultrapassar
+                                                                                        fit: BoxFit.scaleDown,
                                                                                         alignment: Alignment.centerLeft,
                                                                                         child: Text(
                                                                                           "COMENTÁRIO SALVO COM SUCESSO",
                                                                                           style: GoogleFonts.bungee(
-                                                                                            fontSize: 12, // tamanho base
+                                                                                            fontSize: 12,
                                                                                             color: Colors.black,
                                                                                           ),
                                                                                         ),
@@ -779,11 +795,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                                   width: 13,
                                                                                   height: 13,
                                                                                   decoration: BoxDecoration(
-                                                                                    color: const Color.fromARGB(255, 255, 0, 0), // cor interna
+                                                                                    color: const Color.fromARGB(255, 255, 0, 0),
                                                                                     shape: BoxShape.circle,
                                                                                     border: Border.all(
-                                                                                      color: Colors.black, // cor da borda
-                                                                                      width: 2, // espessura da borda
+                                                                                      color: Colors.black, 
+                                                                                      width: 2, 
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -799,11 +815,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                                   width: 13,
                                                                                   height: 13,
                                                                                   decoration: BoxDecoration(
-                                                                                    color: const Color.fromARGB(255, 255, 230, 0), // cor interna
+                                                                                    color: const Color.fromARGB(255, 255, 230, 0),
                                                                                     shape: BoxShape.circle,
                                                                                     border: Border.all(
-                                                                                      color: Colors.black, // cor da borda
-                                                                                      width: 2, // espessura da borda
+                                                                                      color: Colors.black, 
+                                                                                      width: 2, 
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -819,11 +835,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                                   width: 13,
                                                                                   height: 13,
                                                                                   decoration: BoxDecoration(
-                                                                                    color: const Color.fromARGB(255, 55, 255, 0), // cor interna
+                                                                                    color: const Color.fromARGB(255, 55, 255, 0),
                                                                                     shape: BoxShape.circle,
                                                                                     border: Border.all(
-                                                                                      color: Colors.black, // cor da borda
-                                                                                      width: 2, // espessura da borda
+                                                                                      color: Colors.black, 
+                                                                                      width: 2, 
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -839,16 +855,16 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
 
                                                                       
                                                               style: ElevatedButton.styleFrom(
-                                                                padding: EdgeInsets.zero, // importante para preencher tudo
+                                                                padding: EdgeInsets.zero, 
                                                                 shape: RoundedRectangleBorder(
                                                                   borderRadius: BorderRadius.circular(20),
-                                                                  side: const BorderSide( // borda preta
+                                                                  side: const BorderSide( 
                                                                     color: Colors.black,
                                                                     width: 2,
                                                                   ),
                                                                 ),
-                                                                backgroundColor: Colors.transparent, // transparente para mostrar o gradiente
-                                                                shadowColor: Colors.transparent, // remove sombra
+                                                                backgroundColor: Colors.transparent,
+                                                                shadowColor: Colors.transparent,
                                                               ).copyWith(
                                                                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
                                                                 surfaceTintColor: WidgetStateProperty.all(Colors.transparent),
@@ -858,9 +874,9 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                 decoration: BoxDecoration(
                                                                   gradient: const LinearGradient(
                                                                     colors: [
-                                                                      Color(0xFF1900FF), // vermelho topo
-                                                                      Colors.black,      // preto meio
-                                                                      Color(0xFF1900FF), // vermelho embaixo
+                                                                      Color(0xFF1900FF),
+                                                                      Colors.black,
+                                                                      Color(0xFF1900FF),
                                                                     ],
                                                                     begin: Alignment.topCenter,
                                                                     end: Alignment.bottomCenter,
@@ -1034,10 +1050,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
 
           Align(
             child: Padding(
-              padding: const EdgeInsets.only(top: 700), // ajuste a posição
+              padding: const EdgeInsets.only(top: 700), 
               child: Container(
-                width: 350,  // largura do quadrado
-                height: 55, // altura do quadrado
+                width: 350,  
+                height: 55,
                 decoration: BoxDecoration(
                   color: Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.circular(80),
@@ -1053,7 +1069,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 270), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 270),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -1083,10 +1099,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.black, width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40),
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -1107,7 +1123,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, right: 90), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, right: 90),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -1137,10 +1153,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255), // cor interna do botão
-                    side: const BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2), // borda preta
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    side: const BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -1161,7 +1177,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 95), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 95),
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -1171,10 +1187,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 0, 0), // cor interna do botão
-                    side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2), // borda preta
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                    side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2), 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40), 
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -1195,7 +1211,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 747, left: 275), // ajuste a posição vertical
+              padding: EdgeInsets.only(top: 747, left: 275), 
               child: SizedBox(
                 width: 50,
                 height: 50,
@@ -1225,10 +1241,10 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                   },
 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // cor interna do botão
-                    side: const BorderSide(color: Colors.black, width: 2), // borda preta
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.black, width: 2),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // muda o radius das bordas
+                      borderRadius: BorderRadius.circular(40),
                     ),
                     padding: EdgeInsets.zero,
                   ),

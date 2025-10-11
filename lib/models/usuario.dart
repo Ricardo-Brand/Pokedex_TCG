@@ -7,7 +7,7 @@ class Usuario {
   final String email;
   final String senha;
 
-  // 🔹 Construtor privado — impede criação externa
+  // Construtor privado — impede criação externa
   Usuario._({
     required this.nome,
     required this.telefone,
@@ -15,10 +15,10 @@ class Usuario {
     required this.senha,
   });
 
-  // 🔹 Instância única (singleton)
+  // Instância única (singleton)
   static Usuario? _instancia;
 
-  /// Retorna o usuário atual, se existir
+  // Retorna o usuário atual, se existir
   static Usuario get instancia {
     if (_instancia == null) {
       throw Exception('Usuário ainda não foi criado!');
@@ -26,7 +26,7 @@ class Usuario {
     return _instancia!;
   }
 
-  /// Cria o usuário (apenas um pode existir)
+  // Cria o usuário (apenas um pode existir)
   static void criar({
     required String nome,
     required String telefone,
@@ -41,7 +41,7 @@ class Usuario {
     );
   }
 
-  /// Verifica se existe um usuário com o email e senha informados
+  // Verifica se existe um usuário com o email e senha informados
   static Usuario? existe(String email, String senha) {
     if (_instancia == null) return null;
     if (_instancia!.email == email && _instancia!.senha == senha) {
@@ -50,12 +50,12 @@ class Usuario {
     return null;
   }
 
-  /// Remove o usuário atual (ex: logout)
+  // Remove o usuário atual (ex: logout)
   static void limpar() {
     _instancia = null;
   }
 
-  /// Converte o usuário para Map (ex: salvar localmente)
+  // Converte o usuário para Map (ex: salvar localmente)
   Map<String, dynamic> toMap() {
     return {
       'nome': nome,
@@ -65,7 +65,7 @@ class Usuario {
     };
   }
 
-  /// Cria um usuário a partir de um Map (ex: JSON)
+  // Cria um usuário a partir de um Map (ex: JSON)
   static Usuario fromMap(Map<String, dynamic> map) {
     return Usuario._(
       nome: map['nome'],

@@ -15,7 +15,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
   String infoMessage = '';
   bool firstPress = true;
 
-  final TextEditingController _emailController = TextEditingController(); // controlador
+  final TextEditingController _emailController = TextEditingController();
 
   void _mostrarSnackBar(String mensagem, {Color? cor}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +101,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
               child: SizedBox(
                 width: 360,
                 child: TextField(
-                  controller: _emailController, // adiciona controlador
+                  controller: _emailController,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -134,7 +134,6 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                     String email = _emailController.text.trim();
 
                     if (email.isEmpty) {
-                      // ❌ Se estiver em branco, mostra SnackBar
                       _mostrarSnackBar('O campo de email não pode estar em branco.', cor: Colors.red);
                       return;
                     }

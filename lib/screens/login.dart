@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // ✅ Login bem-sucedido
+    // Login bem-sucedido
     _mostrarSnackBar('Bem-vindo(a), ${usuario.nome}!', cor: Colors.green);
 
     Navigator.push(
