@@ -15,6 +15,25 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
   String infoMessage = '';
   bool firstPress = true;
 
+  final TextEditingController _emailController = TextEditingController(); // controlador
+
+  void _mostrarSnackBar(String mensagem, {Color? cor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Center(
+          child: Text(
+            mensagem,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+        backgroundColor: cor ?? Colors.black87,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -32,7 +51,10 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          // Texto descritivo
+          /*
+            Texto descritivo 
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -55,10 +77,10 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                     ),
                   ),
                   Text(
-                    'Recuperar Senha',     
+                    'Recuperar Senha',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.bungee(
-                      color: Colors.white, 
+                      color: Colors.white,
                       fontSize: screenWidth * 0.06,
                       height: 1.4,
                     ),
@@ -68,15 +90,18 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
+          /*
+           Email TextField 
+          */ 
 
-          // Email TextField
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 380, left: 36, right: 32), // ajuste a posição
+              padding: EdgeInsets.only(top: 380, left: 36, right: 32),
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360,
                 child: TextField(
+                  controller: _emailController, // adiciona controlador
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -91,7 +116,10 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          // Botão entrar
+          /* 
+            Botão enviar
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -103,6 +131,14 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                 height: screenWidth * 0.15,
                 child: ElevatedButton(
                   onPressed: () {
+                    String email = _emailController.text.trim();
+
+                    if (email.isEmpty) {
+                      // ❌ Se estiver em branco, mostra SnackBar
+                      _mostrarSnackBar('O campo de email não pode estar em branco.', cor: Colors.red);
+                      return;
+                    }
+
                     setState(() {
                       if (firstPress) {
                         buttonText = 'Reenviar';
@@ -131,7 +167,10 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          // Texto descritivo
+          /*
+            Texto descritivo infoMessage
+          */
+           
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -155,11 +194,11 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                     ),
                   ),
                   Text(
-                    infoMessage,  
+                    infoMessage,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.bungee(
                       decoration: TextDecoration.underline,
-                      color: Colors.white, 
+                      color: Colors.white,
                       fontSize: screenWidth * 0.044,
                       height: 1.4,
                     ),
@@ -169,7 +208,10 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          // Botão voltar
+          /*
+            Botão voltar
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -201,7 +243,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                             child: child,
                           );
                         },
-                      ),  
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(

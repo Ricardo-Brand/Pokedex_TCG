@@ -4,6 +4,7 @@ import 'sobre.dart';
 import 'recuperar_senha.dart';
 import 'cadastrar.dart';
 import 'inicio.dart';
+import 'package:pokedex_tcg/models/usuario.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,36 +18,62 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final RegExp _emailRegex = RegExp(r'^[A-Za-z]{3,}@[A-Za-z]{3,}\.[A-Za-z]{3,}$');
-
-  void _validateInputs() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-
-    if (!_emailRegex.hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Email inválido. Deve ter formato: aaa@bbb.ccc'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('A senha não pode estar em branco.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
+  void _mostrarSnackBar(String mensagem, {Color? cor}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Login válido!'),
-        backgroundColor: Colors.green,
+      SnackBar(
+        content: Center(
+          child: Text(
+            mensagem,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+        backgroundColor: cor ?? Colors.black87,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _fazerLogin() {
+    final email = _emailController.text.trim();
+    final senha = _passwordController.text.trim();
+
+    if (email.isEmpty || senha.isEmpty) {
+      _mostrarSnackBar('Preencha todos os campos.', cor: Colors.red);
+      return;
+    }
+
+    // Verifica se o usuário existe
+    final usuario = Usuario.existe(email, senha);
+
+    if (usuario == null) {
+      _mostrarSnackBar('Senha ou email incorretos', cor: Colors.red);
+      return;
+    }
+
+    // ✅ Login bem-sucedido
+    _mostrarSnackBar('Bem-vindo(a), ${usuario.nome}!', cor: Colors.green);
+
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const InicioScreen(),
+        transitionsBuilder:
+            (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end)
+              .chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -57,19 +84,18 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
+          Image.asset('assets/fundo.jpeg', fit: BoxFit.cover),
 
-          Image.asset(
-            'assets/fundo.jpeg',
-            fit: BoxFit.cover,
-          ),
+          /*
+            Título Pokédex TCG
+          */
 
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 240), // ajuste aqui a distância do topo
+              padding: const EdgeInsets.only(top: 240),
               child: Stack(
                 children: [
-                  // Stroke (contorno branco)
                   Text(
                     'Pokédex\nTCG',
                     textAlign: TextAlign.center,
@@ -82,19 +108,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ..color = Colors.white,
                     ),
                   ),
-                  // Texto preenchido (vermelho)
                   Text(
                     'Pokédex\nTCG',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.bungee(
-                      color: Color(0xFFE1000C),
+                      color: const Color(0xFFE1000C),
                       fontSize: 60,
                       height: 1.1,
                       shadows: [
                         Shadow(
                           blurRadius: 8,
                           color: Colors.white.withOpacity(1.0),
-                          offset: Offset(2, 8),
+                          offset: const Offset(2, 8),
                         ),
                       ],
                     ),
@@ -104,27 +129,33 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Emoji 
+          /*
+            Ícone Pikachu
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 25, left: 75), // ajuste aqui a distância do topo
+              padding: const EdgeInsets.only(top: 25, left: 75),
               child: Image.asset(
                 'assets/pikachu.png',
-                width: 225, // ajuste o tamanho conforme necessário
+                width: 225,
                 height: 225,
                 fit: BoxFit.contain,
               ),
             ),
           ),
 
-          // Email TextField
+          /*
+            Email TextField
+          */
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 400, left: 36, right: 32), // ajuste a posição
+              padding: const EdgeInsets.only(top: 400, left: 36, right: 32),
               child: SizedBox(
-                width: 360, // largura do campo
+                width: 360,
                 child: TextField(
                   controller: _emailController,
                   textAlign: TextAlign.center,
@@ -141,12 +172,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
+          /*
+            Senha TextField
+          */ 
 
-          // Senha TextField
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 480, left: 36, right: 32),
+              padding: const EdgeInsets.only(top: 480, left: 36, right: 32),
               child: SizedBox(
                 width: 360,
                 child: TextField(
@@ -179,27 +212,28 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Esqueceu a senha?
+          /*
+          Botão Esqueceu a senha
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 555), // ajuste a posição vertical
+              padding: const EdgeInsets.only(top: 555),
               child: TextButton(
                 onPressed: () {
-                  // Navegar para a tela LoginScreen com animação personalizada
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => const RecSenhaScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        // Define de onde a tela nova vai começar
-                        const begin = Offset(1.0, 0.0); // 1.0 = fora da tela pela DIREITA
-                        const end = Offset.zero;        // 0.0 = posição normal
-                        const curve = Curves.easeInOut; // curva suave
-
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const RecSenhaScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
                         var tween = Tween(begin: begin, end: end)
                             .chain(CurveTween(curve: curve));
-
                         return SlideTransition(
                           position: animation.drive(tween),
                           child: child,
@@ -209,13 +243,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 },
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size(0, 0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  foregroundColor: Colors.white, // cor do texto
+                  foregroundColor: Colors.white,
                   textStyle: const TextStyle(
                     fontSize: 14,
-                    decoration: TextDecoration.underline, // sublinhado
+                    decoration: TextDecoration.underline,
                   ),
                 ),
                 child: const Text('Esqueceu a senha?'),
@@ -223,69 +254,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Botão Entrar
+          /*
+            Botão Entrar
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 610, right: 175), // ajuste a posição vertical
+              padding: const EdgeInsets.only(top: 610, right: 175),
               child: SizedBox(
                 width: 140,
                 height: 45,
                 child: ElevatedButton(
-                   onPressed: () {
-                    final email = _emailController.text.trim();
-                    final password = _passwordController.text.trim();
-                    final RegExp emailRegex = RegExp(r'^[A-Za-z]{3,}@[A-Za-z]{3,}\.[A-Za-z]{3,}$');
-
-                    if (!emailRegex.hasMatch(email)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Center(
-                            child: Text('Email inválido. Use o formato xxx@gmail.com'),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      return; // ❌ para aqui, não navega
-                    }
-
-                    if (password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Center(
-                            child: Text('Senha incorreta'),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      return; // ❌ também para aqui
-                    }
-
-                    // ✅ Se tudo estiver certo, navega normalmente
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const InicioScreen(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut;
-
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                  },
+                  onPressed: _fazerLogin,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE1000C), // cor do botão
+                    backgroundColor: const Color(0xFFE1000C),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -302,31 +285,31 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
+          /*
+            Botão Cadastrar
+          */ 
 
-          // Botão Cadastrar
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 610, left: 175), // ajuste a posição vertical
+              padding: const EdgeInsets.only(top: 610, left: 175),
               child: SizedBox(
                 width: 140,
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navegar para a tela LoginScreen com animação personalizada
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => const CadastrarScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          // Define de onde a tela nova vai começar
-                          const begin = Offset(1.0, 0.0); // 1.0 = fora da tela pela DIREITA
-                          const end = Offset.zero;        // 0.0 = posição normal
-                          const curve = Curves.easeInOut; // curva suave
-
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const CadastrarScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
                           var tween = Tween(begin: begin, end: end)
                               .chain(CurveTween(curve: curve));
-
                           return SlideTransition(
                             position: animation.drive(tween),
                             child: child,
@@ -336,7 +319,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1E1E1E), // cor do botão
+                    backgroundColor: const Color(0xFF1E1E1E),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -353,30 +336,31 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Botão circular Sobre
+          /*
+            Botão Sobre
+          */ 
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 700, right: 300), // ajuste a posição vertical
+              padding: const EdgeInsets.only(top: 700, right: 300),
               child: SizedBox(
                 width: 50,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navegar para a tela LoginScreen com animação personalizada
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => const SobreScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          // Define de onde a tela nova vai começar
-                          const begin = Offset(1.0, 0.0); // 1.0 = fora da tela pela DIREITA
-                          const end = Offset.zero;        // 0.0 = posição normal
-                          const curve = Curves.easeInOut; // curva suave
-
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const SobreScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
                           var tween = Tween(begin: begin, end: end)
                               .chain(CurveTween(curve: curve));
-
                           return SlideTransition(
                             position: animation.drive(tween),
                             child: child,
@@ -385,26 +369,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   },
-
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE1000C),
-                    shape: const CircleBorder(), // formato de bola
+                    backgroundColor: const Color(0xFFE1000C),
+                    shape: const CircleBorder(),
                     padding: EdgeInsets.zero,
                   ),
-                  child: Text(
-                    '?',
-                    style: GoogleFonts.bungee(
-                      color: Colors.white,
-                      fontSize: 24,
+                  child: Center(
+                    child: Text(
+                      '?',
+                      style: GoogleFonts.bungee(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-
         ],
-      )
+      ),
     );
   }
 }
