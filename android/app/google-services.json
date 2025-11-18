@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488151937611",
+    "project_id": "pokedex-tcg-bee6b",
+    "storage_bucket": "pokedex-tcg-bee6b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488151937611:android:7117864c2383ea277753ce",
+        "android_client_info": {
+          "package_name": "com.example.pokedex_tcg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhqERe_mPgcrEZzuSg6VIXKYeRwFwA8mo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

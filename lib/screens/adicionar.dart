@@ -26,7 +26,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
   }
 
   Future<void> _loadPokemons() async {
-    final pokemons = await loadPokemonCards(); // função que lê o .txt
+    final pokemons = await loadPokemonCards();
     setState(() {
       _pokemons = pokemons;
       _filteredPokemons = pokemons;
@@ -154,7 +154,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                     const SizedBox(width: 10),
 
                                     /*
-                                    Coluna 1 - Nome
+                                      Coluna 1 - Nome
                                     */ 
 
                                     SizedBox(
@@ -172,7 +172,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                     const SizedBox(width: 55),
                                     
                                     /*
-                                    Coluna 2 - Código
+                                      Coluna 2 - Código
                                     */
                                     
                                     SizedBox(
@@ -189,7 +189,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                     ),
 
                                     /*
-                                    Coluna 3 - Adicionar 
+                                      Coluna 3 - Adicionar 
                                     */
 
                                     Padding(

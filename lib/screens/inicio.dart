@@ -86,7 +86,7 @@ class _InicioScreenState extends State<InicioScreen> {
           ),
 
           /*
-           Botão logout 
+            Botão logout 
           */
 
           Align(

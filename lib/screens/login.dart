@@ -4,7 +4,7 @@ import 'sobre.dart';
 import 'recuperar_senha.dart';
 import 'cadastrar.dart';
 import 'inicio.dart';
-import 'package:pokedex_tcg/models/usuario.dart';
+import 'package:pokedex_tcg/controllers/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final LoginController _loginController = LoginController();
   bool _obscurePassword = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -35,47 +36,54 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _fazerLogin() {
+  void _fazerLogin() async {
     final email = _emailController.text.trim();
     final senha = _passwordController.text.trim();
 
+    // 1. validação simples
     if (email.isEmpty || senha.isEmpty) {
       _mostrarSnackBar('Preencha todos os campos.', cor: Colors.red);
       return;
     }
 
-    // Verifica se o usuário existe
-    final usuario = Usuario.existe(email, senha);
+    // 2. chamar o controller
+    final resultado = await _loginController.login(email, senha);
 
-    if (usuario == null) {
-      _mostrarSnackBar('Senha ou email incorretos', cor: Colors.red);
+    // 3. resultado != null → erro
+    if (resultado != null) {
+      _mostrarSnackBar('Falha ao entrar. Verifique os dados.', cor: Colors.red);
       return;
     }
 
-    // Login bem-sucedido
-    _mostrarSnackBar('Bem-vindo(a), ${usuario.nome}!', cor: Colors.green);
+    // 4. sucesso → mensagem + navegação
+    _mostrarSnackBar('Login realizado com sucesso!', cor: Colors.green);
 
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const InicioScreen(),
-        transitionsBuilder:
-            (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (!mounted) return; // ← evita erro
 
-          var tween = Tween(begin: begin, end: end)
-              .chain(CurveTween(curve: curve));
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const InicioScreen(),
+          transitionsBuilder:
+              (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
 
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
+            var tween = Tween(begin: begin, end: end)
+                .chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+      );
+    });
+
   }
 
   @override

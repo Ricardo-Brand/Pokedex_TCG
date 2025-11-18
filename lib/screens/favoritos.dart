@@ -851,9 +851,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                     );
                                                                   },
                                                                 );
-                                                              },
-
-                                                                      
+                                                              }, 
                                                               style: ElevatedButton.styleFrom(
                                                                 padding: EdgeInsets.zero, 
                                                                 shape: RoundedRectangleBorder(
