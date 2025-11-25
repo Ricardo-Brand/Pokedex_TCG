@@ -4,7 +4,7 @@ import 'sobre.dart';
 import 'recuperar_senha.dart';
 import 'cadastrar.dart';
 import 'inicio.dart';
-import 'package:pokedex_tcg/controllers/login_controller.dart';
+import 'package:pokedex_tcg/controllers/login.controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

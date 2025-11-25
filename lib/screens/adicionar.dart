@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
-import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
+import 'package:pokedex_tcg/models/pokemons_card.dart'; 
 import 'package:google_fonts/google_fonts.dart';
 import 'inicio.dart';
 import 'list.dart';
@@ -15,9 +15,9 @@ class AdicionarScreen extends StatefulWidget {
 }
 
 class _AdicionarScreenState extends State<AdicionarScreen> {
-  List<PokemonCard> _pokemons = [];
+  List<PokemonCardF> _pokemons = [];
   final TextEditingController _searchController = TextEditingController();
-  List<PokemonCard> _filteredPokemons = [];
+  List<PokemonCardF> _filteredPokemons = [];
 
   @override
   void initState() {
@@ -58,10 +58,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
         fit: StackFit.expand,
         children: [
 
-          /*
-            Fundo e Título 
-          */
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -69,10 +65,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
               child: const PokedexTitle(),
             ),
           ),
-
-          /* 
-            Pesquisar TextField 
-          */
 
           Align(
             alignment: Alignment.topCenter,
@@ -100,11 +92,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
             ),
           ),
 
-
-          /* 
-            Lista e seus ícones 
-          */
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -119,10 +106,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                 child: Stack(
                   children: [
 
-                    /* 
-                      Linhas verticais contínuas 
-                    */
-
                     Positioned(
                       left: 125,
                       top: 0,
@@ -132,10 +115,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                         color: Colors.grey,
                       ),
                     ),
-
-                    /* 
-                      Coluna para reservar espaço fixo 
-                    */
 
                     Column(
                       children: [
@@ -153,10 +132,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                   children: [
                                     const SizedBox(width: 10),
 
-                                    /*
-                                      Coluna 1 - Nome
-                                    */ 
-
                                     SizedBox(
                                       width: 90,
                                       child: Text(
@@ -170,11 +145,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 55),
-                                    
-                                    /*
-                                      Coluna 2 - Código
-                                    */
-                                    
+
                                     SizedBox(
                                       width: 80,
                                       child: Text(
@@ -188,10 +159,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                       ),
                                     ),
 
-                                    /*
-                                      Coluna 3 - Adicionar 
-                                    */
-
                                     Padding(
                                       padding: const EdgeInsets.only(left: 50),
                                       child: SizedBox(
@@ -199,7 +166,8 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                                         height: 25,
                                         child: IconButton(
                                           onPressed: () {
-                                            final selectedPokemon = _pokemons[index];
+                                            final selectedPokemon = _filteredPokemons[index]; // CORRIGIDO
+
                                             Navigator.push(
                                               context,
                                               PageRouteBuilder(
@@ -249,10 +217,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
             ),
           ),
 
-          /*
-            Texto Pokemon
-          */ 
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -287,10 +251,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
               ),
             ),
           ),
- 
-          /*
-            Texto Código
-          */
 
           Align(
             alignment: Alignment.topCenter,
@@ -327,12 +287,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
             ),
           ),
 
-
-
-          /* 
-            Barra de botões
-          */
-
           Align(
             child: Padding(
               padding: const EdgeInsets.only(top: 700),
@@ -346,10 +300,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
               ),
             ),
           ),
-
-          /* 
-            Botão lista 
-          */
 
           Align(
             alignment: Alignment.topCenter,
@@ -401,10 +351,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
             ),
           ),
 
-          /* 
-            Botão home
-          */
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -454,10 +400,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
               ),
             ),
           ),
-
-          /* 
-            Botão favoritos
-          */
 
           Align(
             alignment: Alignment.topCenter,
@@ -509,10 +451,6 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
             ),
           ),
 
-          /* 
-            Botão adicionar
-          */
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -521,9 +459,7 @@ class _AdicionarScreenState extends State<AdicionarScreen> {
                 width: 50,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Pressionar
-                  },
+                  onPressed: () {},
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 0, 0, 0),

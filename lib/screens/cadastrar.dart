@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
-import 'package:pokedex_tcg/controllers/cadastrar_controller.dart';
+import 'package:pokedex_tcg/controllers/cadastrar.controller.dart';
 import 'login.dart';
 
 class CadastrarScreen extends StatefulWidget {

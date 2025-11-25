@@ -52,3 +52,13 @@ Tyrogue (605/130)
 Hitmonlee (616/150)
 Crabominable (123/456)
 Hoopa Confined(456/789)
+
+code
+
+name
+
+rarity
+
+setName
+
+type

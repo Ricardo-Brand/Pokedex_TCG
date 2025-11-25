@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
+import 'package:pokedex_tcg/models/pokemons_card.dart'; // ← trocado
 import 'inicio.dart';
+import '../controllers/cvt.controller.dart';
 
 class CvtScreen extends StatefulWidget {
-  final PokemonCard pokemon; // Pokémon passado de fora
+  final PokemonCardF pokemon;
 
   const CvtScreen({super.key, required this.pokemon});
 
@@ -19,16 +20,13 @@ class _CvtScreenState extends State<CvtScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final pokemon = widget.pokemon;
+    final CvtController _controller = CvtController();
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-
-          /*
-            Fundo e Título 
-          */
-
+          
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -36,10 +34,6 @@ class _CvtScreenState extends State<CvtScreen> {
               child: const PokedexTitle(),
             ),
           ),
-
-          /*
-           Botão voltar
-          */
 
           Align(
             alignment: Alignment.topCenter,
@@ -71,10 +65,6 @@ class _CvtScreenState extends State<CvtScreen> {
             ),
           ),
 
-          /* 
-            Lista e seus ícones 
-          */
-
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -88,10 +78,6 @@ class _CvtScreenState extends State<CvtScreen> {
                 ),
                 child: Stack(
                   children: [
-
-                    /* 
-                      Linha vertical contínua
-                    */
 
                     Positioned(
                       left: 175,
@@ -136,17 +122,13 @@ class _CvtScreenState extends State<CvtScreen> {
                       child: Row(
                         children: [
 
-                          /*
-                            Coluna Nome
-                          */ 
-
                           SizedBox(
                             width: 120,
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                pokemon.name,
+                                pokemon.name, // ← funciona igual
                                 style: GoogleFonts.bungee(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -157,17 +139,13 @@ class _CvtScreenState extends State<CvtScreen> {
 
                           SizedBox(width: 60),
 
-                          /*
-                            Coluna Código
-                          */
-
                           SizedBox(
                             width: 60,
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                pokemon.code,
+                                pokemon.code, // ← funciona igual
                                 style: GoogleFonts.bungee(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -185,10 +163,6 @@ class _CvtScreenState extends State<CvtScreen> {
             ),
           ),
 
-          /*
-            Botão Comprado
-          */
-
           Positioned(
             top: 450,
             left: 22,
@@ -196,7 +170,13 @@ class _CvtScreenState extends State<CvtScreen> {
               width: 350,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await _controller.setSituation(
+                    context: context,
+                    code: pokemon.code,
+                    situation: "comprado",
+                  );
+
                   Navigator.push(
                     context,
                     PageRouteBuilder(
@@ -216,7 +196,7 @@ class _CvtScreenState extends State<CvtScreen> {
                           child: child,
                         );
                       },
-                    ),  
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -238,10 +218,6 @@ class _CvtScreenState extends State<CvtScreen> {
             ),
           ),
 
-          /*
-            Botão Vendido
-          */
-
           Positioned(
             top: 550,
             left: 22,
@@ -249,7 +225,13 @@ class _CvtScreenState extends State<CvtScreen> {
               width: 350,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await _controller.setSituation(
+                    context: context,
+                    code: pokemon.code,
+                    situation: "vendido",
+                  );
+
                   Navigator.push(
                     context,
                     PageRouteBuilder(
@@ -269,12 +251,12 @@ class _CvtScreenState extends State<CvtScreen> {
                           child: child,
                         );
                       },
-                    ),  
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 110, 110, 110)
-,                  shape: RoundedRectangleBorder(
+                  backgroundColor: const Color.fromARGB(255, 110, 110, 110),
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
@@ -291,10 +273,6 @@ class _CvtScreenState extends State<CvtScreen> {
             ),
           ),
 
-          /*
-            Botão Trocado
-          */
-
           Positioned(
             top: 650,
             left: 22,
@@ -302,7 +280,13 @@ class _CvtScreenState extends State<CvtScreen> {
               width: 350,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await _controller.setSituation(
+                    context: context,
+                    code: pokemon.code,
+                    situation: "trocado",
+                  );
+
                   Navigator.push(
                     context,
                     PageRouteBuilder(
@@ -322,7 +306,7 @@ class _CvtScreenState extends State<CvtScreen> {
                           child: child,
                         );
                       },
-                    ),  
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(

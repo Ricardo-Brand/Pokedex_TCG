@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
+import 'package:pokedex_tcg/models/pokemons_card.dart'; // importa o model
+import 'package:pokedex_tcg/controllers/favoritos.controller.dart';
 import 'list.dart';
 import 'inicio.dart';
 import 'adicionar.dart';
@@ -81,23 +82,29 @@ class FavoritosScreen extends StatefulWidget {
 }
 
 class _FavoritosScreenState extends State<FavoritosScreen> {
-  List<PokemonCard> _pokemons = [];
-  List<bool> isPressedList = []; // dentro do seu State
+  final FavoritosController _controller = FavoritosController();
+  List<PokemonCardF> _pokemons = [];
+  List<PokemonCardF> _filteredPokemons = [];
+  Map<String, Map<String, dynamic>> _cardsData = {};
   final TextEditingController _searchController = TextEditingController();
-  List<PokemonCard> _filteredPokemons = [];
+  final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loadPokemons();
+    _loadData();
   }
 
-  Future<void> _loadPokemons() async {
+  Future<void> _loadData() async {
+    // 1. Busca todas as cartas do Pokedex
     final pokemons = await loadPokemonCards();
+    // 2. Busca os dados do usuário (favoritos, comentários)
+    final cardsData = await _controller.getCardsData();
+
     setState(() {
       _pokemons = pokemons;
-      isPressedList = List<bool>.filled(_pokemons.length, false);
       _filteredPokemons = pokemons;
+      _cardsData = cardsData;
     });
   }
 
@@ -116,7 +123,13 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
       }
     });
   }
-  
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _commentController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -214,6 +227,9 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                             itemCount: _filteredPokemons.length,
                             itemBuilder: (context, index) {
                               final pokemon = _filteredPokemons[index];
+                              final cardData = _cardsData[pokemon.code] ?? {'favorite': false, 'comment': ''};
+                              final isFavorite = cardData['favorite'] as bool;
+                              final comment = cardData['comment'] as String;
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -266,6 +282,8 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                         height: 25,
                                         child: IconButton(
                                           onPressed: () {
+                                            _commentController.text = comment;
+
                                             showDialog(
                                               context: context,
                                               barrierDismissible: true,
@@ -310,6 +328,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                               child: TextField(
                                                                 keyboardType: TextInputType.multiline,
                                                                 maxLines: null,
+                                                                controller: _commentController,
                                                                 decoration: const InputDecoration(
                                                                   hintText: "Escreva seu comentário...",
                                                                   border: InputBorder.none,
@@ -661,7 +680,21 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                             height: 30,
                                                             child: ElevatedButton(
                                                               onPressed: () {
-                                                                showDialog(
+                                                                final newComment = _commentController.text;
+                                                                _controller.updateComment(
+                                                                  pokemonCode: pokemon.code,
+                                                                  pokemonName: pokemon.name,
+                                                                  comment: newComment,
+                                                                );
+
+                                                                setState(() {
+                                                                  _cardsData[pokemon.code] = {
+                                                                    'favorite': isFavorite,
+                                                                    'comment': newComment,
+                                                                  };
+                                                                });
+                                                                Navigator.pop(context); // Fecha o dialog de comentário
+                                                                showDialog( // Mostra o dialog de sucesso
                                                                   context: context,
                                                                   barrierDismissible: true,
                                                                   barrierColor: Colors.black.withOpacity(0.75),
@@ -753,7 +786,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                                   height: 30,
                                                                                   child: ElevatedButton(
                                                                                     onPressed: () {
-                                                                                      Navigator.pop(context);
+                                                                                      Navigator.pop(context); // Fecha o dialog de sucesso
                                                                                     },
                                                                                     style: ElevatedButton.styleFrom(
                                                                                       padding: EdgeInsets.zero,
@@ -851,7 +884,9 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                                     );
                                                                   },
                                                                 );
-                                                              }, 
+                                                              },
+
+                                                                      
                                                               style: ElevatedButton.styleFrom(
                                                                 padding: EdgeInsets.zero, 
                                                                 shape: RoundedRectangleBorder(
@@ -930,14 +965,21 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                         width: 25,
                                         height: 25,
                                         child: IconButton(
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            await _controller.toggleFavoriteStatus(
+                                              pokemonCode: pokemon.code,
+                                              pokemonName: pokemon.name,
+                                              isCurrentlyFavorite: isFavorite,
+                                            );
                                             setState(() {
-                                              isPressedList[index] = !isPressedList[index];
+                                              _cardsData[pokemon.code] = {
+                                                'favorite': !isFavorite,
+                                                'comment': comment,
+                                              };
                                             });
-                                            
                                           },
                                           icon: Icon(Icons.star,
-                                              color: isPressedList[index] ? Colors.yellow : Colors.white, 
+                                              color: isFavorite ? Colors.yellow : Colors.white, 
                                               size: 18),
                                           style: IconButton.styleFrom(
                                             backgroundColor: Colors.black,

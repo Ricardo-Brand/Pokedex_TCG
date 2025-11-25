@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:pokedex_tcg/screens/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pokedex_tcg/controllers/rec_senha.controller.dart';
 
 class RecSenhaScreen extends StatefulWidget {
   const RecSenhaScreen({super.key});
@@ -16,6 +17,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
   bool firstPress = true;
 
   final TextEditingController _emailController = TextEditingController();
+  final RecSenhaController _controller = RecSenhaController();
 
   void _mostrarSnackBar(String mensagem, {Color? cor}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -45,22 +47,19 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
         children: [
           Align(
             alignment: Alignment.topCenter,
-            child: Padding(
-              padding: EdgeInsets.only(),
-              child: const PokedexTitle(),
-            ),
+            child: const PokedexTitle(),
           ),
 
-          /*
-            Texto descritivo 
-          */ 
-
+          // -------------------------------
+          // Título
+          // -------------------------------
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.08,
-                vertical: screenHeight * 0.33,
+              padding: EdgeInsets.only(
+                top: screenHeight * 0.33,
+                left: screenWidth * 0.08,
+                right: screenWidth * 0.08,
               ),
               child: Stack(
                 children: [
@@ -90,14 +89,13 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          /*
-           Email TextField 
-          */ 
-
+          // ------------------------------------
+          // Campo EMAIL
+          // ------------------------------------
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 380, left: 36, right: 32),
+              padding: const EdgeInsets.only(top: 380, left: 36, right: 32),
               child: SizedBox(
                 width: 360,
                 child: TextField(
@@ -116,10 +114,9 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          /* 
-            Botão enviar
-          */
-
+          // ------------------------------------
+          // Botão ENVIAR / REENVIAR
+          // ------------------------------------
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -130,11 +127,20 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                 width: screenWidth * 0.35,
                 height: screenWidth * 0.15,
                 child: ElevatedButton(
-                  onPressed: () {
-                    String email = _emailController.text.trim();
+                  onPressed: () async {
+                    final email = _emailController.text.trim();
 
                     if (email.isEmpty) {
-                      _mostrarSnackBar('O campo de email não pode estar em branco.', cor: Colors.red);
+                      _mostrarSnackBar('O campo de email não pode estar em branco.',
+                          cor: Colors.red);
+                      return;
+                    }
+
+                    // Chama o controller Firebase
+                    final error = await _controller.recuperarSenha(email);
+
+                    if (error != null) {
+                      _mostrarSnackBar(error, cor: Colors.red);
                       return;
                     }
 
@@ -157,7 +163,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                   child: Text(
                     buttonText,
                     style: GoogleFonts.bungee(
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                      color: Colors.white,
                       fontSize: 14,
                     ),
                   ),
@@ -166,15 +172,13 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          /*
-            Texto descritivo infoMessage
-          */
-           
+          // ------------------------------------
+          // Mensagem de retorno
+          // ------------------------------------
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(
-                right: screenWidth * 0,
                 top: screenHeight * 0.53,
               ),
               child: Stack(
@@ -189,7 +193,7 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
                       foreground: Paint()
                         ..style = PaintingStyle.stroke
                         ..strokeWidth = 3
-                        ..color = Color.fromARGB(255, 0, 0, 0),
+                        ..color = Colors.black,
                     ),
                   ),
                   Text(
@@ -207,16 +211,14 @@ class _RecSenhaScreenState extends State<RecSenhaScreen> {
             ),
           ),
 
-          /*
-            Botão voltar
-          */ 
-
+          // ------------------------------------
+          // Botão VOLTAR
+          // ------------------------------------
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(
                 top: screenHeight * 0.7,
-                right: screenWidth * 0.0,
               ),
               child: SizedBox(
                 width: screenWidth * 0.35,

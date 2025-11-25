@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
+import 'package:pokedex_tcg/models/pokemons_card.dart'; // importa o model
+import 'package:pokedex_tcg/controllers/inicio.controller.dart';
+import 'package:pokedex_tcg/controllers/cvt.controller.dart';
 import 'login.dart';
 import 'list.dart';
 import 'adicionar.dart';
@@ -16,50 +19,24 @@ class InicioScreen extends StatefulWidget {
 }
 
 class _InicioScreenState extends State<InicioScreen> {
-  bool showDetails = false;
-  List<PokemonCard> _pokemons = [];
+  final InicioController _controller = InicioController();
+  final CvtController _cvtController = CvtController();
+  Stream<List<PokemonCardF>>? _pokemonsStream;
   final TextEditingController _searchController = TextEditingController();
-  List<PokemonCard> _filteredPokemons = [];
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _loadPokemons();
-  }
-
-  Future<void> _loadPokemons() async {
-    final pokemons = await loadPokemonCards(); // função que lê o .txt
-    setState(() {
-      _pokemons = pokemons;
-      _filteredPokemons = pokemons; // exibe tudo inicialmente
-    });
-  }
-
-  String _getStatus(int index) {
-    // Exemplo simples: alterna entre os três
-    switch (index % 3) {
-      case 0:
-        return "Comprado";
-      case 1:
-        return "Vendido";
-      default:
-        return "Trocado";
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _pokemonsStream = _controller.streamPokemonsWithSituation(user.uid);
     }
   }
 
   void _searchPokemon(String query) {
-    query = query.trim().toLowerCase();
-
     setState(() {
-      if (query.isEmpty) {
-        _filteredPokemons = _pokemons;
-      } else {
-        _filteredPokemons = _pokemons.where((pokemon) {
-          final name = pokemon.name.toLowerCase();
-          final code = pokemon.code.toLowerCase();
-          return name.contains(query) || code.contains(query);
-        }).toList();
-      }
+      _searchQuery = query.trim().toLowerCase();
     });
   }
 
@@ -86,7 +63,7 @@ class _InicioScreenState extends State<InicioScreen> {
           ),
 
           /*
-            Botão logout 
+           Botão logout 
           */
 
           Align(
@@ -100,7 +77,8 @@ class _InicioScreenState extends State<InicioScreen> {
                 width: screenWidth * 0.2,
                 height: screenWidth * 0.1,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
                     Navigator.push(
                       context,
                       PageRouteBuilder(
@@ -222,13 +200,31 @@ class _InicioScreenState extends State<InicioScreen> {
                     Column(
                       children: [
                         const SizedBox(height: 45),
-
                         Expanded(
-                          child: ListView.builder(
+                          child: StreamBuilder<List<PokemonCardF>>(
+                            stream: _pokemonsStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              if (snapshot.hasError) {
+                                return const Center(child: Text("Erro ao carregar dados."));
+                              }
+                              
+                              final allPokemons = snapshot.data ?? [];
+                              final filteredPokemons = _searchQuery.isEmpty
+                                  ? allPokemons
+                                  : allPokemons.where((pokemon) {
+                                      final name = pokemon.name.toLowerCase();
+                                      final code = pokemon.code.toLowerCase();
+                                      return name.contains(_searchQuery) || code.contains(_searchQuery);
+                                    }).toList();
+
+                              return ListView.builder(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _filteredPokemons.length,
+                                itemCount: filteredPokemons.length,
                             itemBuilder: (context, index) {
-                               final pokemon =  _filteredPokemons[index];
+                                  final pokemon = filteredPokemons[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -237,15 +233,14 @@ class _InicioScreenState extends State<InicioScreen> {
                                     /* 
                                       Coluna 1 - Nome do Pokémon 
                                     */
-
-                                    SizedBox(
-                                      width: 120,
+                                    Expanded(
+                                      flex: 3,
                                       child: Text(
                                         pokemon.name,
                                          style: GoogleFonts.bungee(
                                           textStyle: TextStyle(
                                             fontSize: 10,
-                                            color: const Color.fromARGB(255, 255, 255, 255),
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
@@ -256,9 +251,8 @@ class _InicioScreenState extends State<InicioScreen> {
                                     /* 
                                       Coluna 2 - Código 
                                     */
-
-                                    SizedBox(
-                                      width: 60,
+                                    Expanded(
+                                      flex: 2,
                                       child: Text(
                                         pokemon.code,
                                          style: GoogleFonts.bungee(
@@ -275,11 +269,10 @@ class _InicioScreenState extends State<InicioScreen> {
                                     /* 
                                       Coluna 3 - Situação 
                                     */
-
-                                    SizedBox(
-                                      width: 80,
+                                    Expanded(
+                                      flex: 2,
                                       child: Text(
-                                        _getStatus(index),
+                                        pokemon.situation ?? 'N/A',
                                         style: GoogleFonts.bungee(
                                           textStyle: TextStyle(
                                             fontSize: 10,
@@ -300,7 +293,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                       height: 20,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          final pokemon = _pokemons[index];
+                                             final selectedPokemon = filteredPokemons[index];
                                           showDialog(
                                             context: context,
                                             barrierDismissible: true,
@@ -347,7 +340,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                           height: 40,  
                                                           child: ElevatedButton(
                                                             onPressed: () {
-                                                              Navigator.pop(context); 
+                                                              Navigator.pop(context); // Fecha o dialog
                                                             },
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFF1E1E1E),
@@ -379,8 +372,12 @@ class _InicioScreenState extends State<InicioScreen> {
                                                           width: 120,  
                                                           height: 40,  
                                                           child: ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(context); 
+                                                            onPressed: () async {
+                                                              await _cvtController.removeSituation(
+                                                                context: context,
+                                                                code: selectedPokemon.code,
+                                                              );
+                                                              Navigator.pop(context);
                                                             },
                                                             style: ElevatedButton.styleFrom(
                                                               backgroundColor: const Color(0xFFC00F0C),
@@ -413,7 +410,6 @@ class _InicioScreenState extends State<InicioScreen> {
                                                           height: 40,  
                                                           child: ElevatedButton(
                                                             onPressed: () {
-                                                              final selectedPokemon = _pokemons[index];
                                                               Navigator.push(
                                                                 context,
                                                                 PageRouteBuilder(
@@ -507,7 +503,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                               fit: BoxFit.scaleDown, 
                                                               alignment: Alignment.centerLeft,
                                                               child: Text(
-                                                                pokemon.name,
+                                                                selectedPokemon.name,
                                                                 style: GoogleFonts.bungee(
                                                                   fontSize: 15, 
                                                                   color: Colors.black,
@@ -528,7 +524,7 @@ class _InicioScreenState extends State<InicioScreen> {
                                                               fit: BoxFit.scaleDown,
                                                               alignment: Alignment.centerLeft,
                                                               child: Text(
-                                                                pokemon.code,
+                                                                selectedPokemon.code,
                                                                 style: GoogleFonts.bungee(
                                                                   fontSize: 15,
                                                                   color: Colors.black,
@@ -569,6 +565,8 @@ class _InicioScreenState extends State<InicioScreen> {
                                     ),
                                   ],
                                 ),
+                              );
+                            },
                               );
                             },
                           ),

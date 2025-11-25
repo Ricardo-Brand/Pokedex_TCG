@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_tcg/widgets/pokedex_title.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pokedex_tcg/models/pokemon_card.dart'; // importa o model
+import 'package:pokedex_tcg/models/pokemons_card.dart'; // importa o model
+import 'package:pokedex_tcg/controllers/list.controller.dart';
 import 'inicio.dart';
 import 'adicionar.dart';
 import 'favoritos.dart';
 
 class PokemonEntry {
-  final PokemonCard pokemon;
+  final PokemonCardF pokemon;
   int quantidade;
 
   PokemonEntry(this.pokemon, this.quantidade);
@@ -21,6 +22,7 @@ class ListaScreen extends StatefulWidget {
 }
 
 class _ListaScreenState extends State<ListaScreen> {
+  final ListController _controller = ListController();
   List<PokemonEntry> _entries = [];
   String _botaoTexto = "Nome";
   final ScrollController _scrollController = ScrollController();
@@ -36,9 +38,17 @@ class _ListaScreenState extends State<ListaScreen> {
   }
 
   Future<void> _loadPokemons() async {
-    final pokemons = await loadPokemonCards();
+    // 1. Busca todas as cartas do Pokedex
+    final allPokemons = await loadPokemonCards();
+    // 2. Busca as quantidades que o usuário já possui
+    final userAmounts = await _controller.getCardAmounts();
+
     setState(() {
-      _entries = pokemons.map((p) => PokemonEntry(p, 0)).toList();
+      // 3. Cria a lista de entradas, combinando os dados
+      _entries = allPokemons.map((p) {
+        final amount = userAmounts[p.code] ?? 0;
+        return PokemonEntry(p, amount);
+      }).toList();
       _filteredEntries = List.from(_entries);
     });
   }
@@ -243,12 +253,16 @@ class _ListaScreenState extends State<ListaScreen> {
                                               width: 12,
                                               height: 12,
                                               child: IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   setState(() {
                                                     if (entry.quantidade > 0) {
                                                       entry.quantidade--;
                                                     }
                                                   });
+                                                  await _controller.updateCardAmount(
+                                                      pokemonCode: pokemon.code,
+                                                      pokemonName: pokemon.name,
+                                                      newAmount: entry.quantidade);
                                                 },
                                                 icon: const Icon(Icons.remove,
                                                     color: Colors.white, size: 10),
@@ -290,10 +304,14 @@ class _ListaScreenState extends State<ListaScreen> {
                                               width: 12,
                                               height: 12,
                                               child: IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   setState(() {
                                                     entry.quantidade++;
                                                   });
+                                                  await _controller.updateCardAmount(
+                                                      pokemonCode: pokemon.code,
+                                                      pokemonName: pokemon.name,
+                                                      newAmount: entry.quantidade);
                                                 },
                                                 icon: const Icon(Icons.add,
                                                     color: Colors.white, size: 10),
