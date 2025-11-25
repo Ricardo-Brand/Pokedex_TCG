@@ -83,9 +83,11 @@ class FavoritosScreen extends StatefulWidget {
 
 class _FavoritosScreenState extends State<FavoritosScreen> {
   final FavoritosController _controller = FavoritosController();
-  List<PokemonCardF> _pokemons = [];
+  List<PokemonCardF> _allPokemons = []; // Lista original, nunca modificada
   List<PokemonCardF> _filteredPokemons = [];
   Map<String, Map<String, dynamic>> _cardsData = {};
+  bool _isLoading = true; // Novo: para controlar o estado de carregamento
+
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
@@ -96,32 +98,67 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
   }
 
   Future<void> _loadData() async {
-    // 1. Busca todas as cartas do Pokedex
-    final pokemons = await loadPokemonCards();
-    // 2. Busca os dados do usuário (favoritos, comentários)
-    final cardsData = await _controller.getCardsData();
+    // Só carrega se os dados ainda não foram obtidos
+    if (_allPokemons.isEmpty) {
+      // 1. Busca todas as cartas e os dados do usuário em paralelo
+      final results = await Future.wait([
+        loadPokemonCards(),
+        _controller.getCardsData(),
+      ]);
 
-    setState(() {
-      _pokemons = pokemons;
-      _filteredPokemons = pokemons;
-      _cardsData = cardsData;
-    });
+      final pokemons = results[0] as List<PokemonCardF>;
+      final cardsData = results[1] as Map<String, Map<String, dynamic>>;
+
+      setState(() {
+        _allPokemons = pokemons;
+        _cardsData = cardsData;
+        // Aplica o filtro e a ordenação iniciais
+        _applyFilterAndSort();
+        _isLoading = false; // Finaliza o carregamento
+      });
+    }
   }
 
   void _searchPokemon(String query) {
-    query = query.trim().toLowerCase();
-
     setState(() {
-      if (query.isEmpty) {
-        _filteredPokemons = _pokemons;
-      } else {
-        _filteredPokemons = _pokemons.where((pokemon) {
-          final name = pokemon.name.toLowerCase();
-          final code = pokemon.code.toLowerCase();
-          return name.contains(query) || code.contains(query);
-        }).toList();
-      }
+      _applyFilterAndSort();
     });
+  }
+
+  // Nova função que combina filtro e ordenação
+  void _applyFilterAndSort() {
+    final query = _searchController.text.trim().toLowerCase();
+    List<PokemonCardF> tempPokemons;
+
+    if (query.isEmpty) {
+      tempPokemons = List.from(_allPokemons);
+    } else {
+      tempPokemons = _allPokemons.where((pokemon) {
+        final name = pokemon.name.toLowerCase();
+        final code = pokemon.code.toLowerCase();
+        return name.contains(query) || code.contains(query);
+      }).toList();
+    }
+
+    // Ordena a lista temporária
+    tempPokemons.sort((a, b) {
+      final aData = _cardsData[a.code] ?? {'favorite': false};
+      final bData = _cardsData[b.code] ?? {'favorite': false};
+      final isAFavorite = aData['favorite'] as bool;
+      final isBFavorite = bData['favorite'] as bool;
+
+      if (isAFavorite && !isBFavorite) {
+        return -1; // a (favorito) vem antes de b (não favorito)
+      }
+      if (!isAFavorite && isBFavorite) {
+        return 1; // b (favorito) vem antes de a (não favorito)
+      }
+      // Se ambos são favoritos ou não, ordena por nome
+      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    });
+
+    // Atualiza a lista que será exibida
+    _filteredPokemons = tempPokemons;
   }
 
   @override
@@ -221,20 +258,27 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                       children: [
                         const SizedBox(height: 45),
 
-                        Expanded(
-                          child: ListView.builder(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            itemCount: _filteredPokemons.length,
-                            itemBuilder: (context, index) {
-                              final pokemon = _filteredPokemons[index];
-                              final cardData = _cardsData[pokemon.code] ?? {'favorite': false, 'comment': ''};
-                              final isFavorite = cardData['favorite'] as bool;
-                              final comment = cardData['comment'] as String;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 10),
+                        if (_isLoading)
+                          const Expanded(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        else
+                          Expanded(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              itemCount: _filteredPokemons.length,
+                              itemBuilder: (context, index) {
+                                final pokemon = _filteredPokemons[index];
+                                final cardData = _cardsData[pokemon.code] ?? {'favorite': false, 'comment': ''};
+                                final isFavorite = cardData['favorite'] as bool;
+                                final comment = cardData['comment'] as String;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 10),
 
                                     /*
                                       Coluna 1 - Nome
@@ -976,6 +1020,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                 'favorite': !isFavorite,
                                                 'comment': comment,
                                               };
+                                              _applyFilterAndSort(); // Reordena a lista
                                             });
                                           },
                                           icon: Icon(Icons.star,
