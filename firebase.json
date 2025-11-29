@@ -1,1 +1,56 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"pokedex-tcg-bee6b","appId":"1:488151937611:android:7117864c2383ea277753ce","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"pokedex-tcg-bee6b","appId":"1:488151937611:ios:3868d6b9ecec137f7753ce","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"pokedex-tcg-bee6b","appId":"1:488151937611:ios:3868d6b9ecec137f7753ce","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"pokedex-tcg-bee6b","configurations":{"android":"1:488151937611:android:7117864c2383ea277753ce","ios":"1:488151937611:ios:3868d6b9ecec137f7753ce","macos":"1:488151937611:ios:3868d6b9ecec137f7753ce","web":"1:488151937611:web:d4b76a6edfe4950f7753ce","windows":"1:488151937611:web:67f22760c89e42f37753ce"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pokedex-tcg-bee6b",
+          "appId": "1:488151937611:android:7117864c2383ea277753ce",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "pokedex-tcg-bee6b",
+          "appId": "1:488151937611:ios:3868d6b9ecec137f7753ce",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "pokedex-tcg-bee6b",
+          "appId": "1:488151937611:ios:3868d6b9ecec137f7753ce",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pokedex-tcg-bee6b",
+          "configurations": {
+            "android": "1:488151937611:android:7117864c2383ea277753ce",
+            "ios": "1:488151937611:ios:3868d6b9ecec137f7753ce",
+            "macos": "1:488151937611:ios:3868d6b9ecec137f7753ce",
+            "web": "1:488151937611:web:d4b76a6edfe4950f7753ce",
+            "windows": "1:488151937611:web:67f22760c89e42f37753ce"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "site": "pokedex-tcg-bee6b",
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

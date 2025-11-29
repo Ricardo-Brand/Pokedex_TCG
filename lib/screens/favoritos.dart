@@ -332,14 +332,17 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                               context: context,
                                               barrierDismissible: true,
                                               barrierColor: Colors.black.withOpacity(0.75),
-                                              builder: (context) {
-                                                return Material(
-                                                  color: Colors.transparent,
-                                                  child: UnconstrainedBox(
-                                                    child: Stack(
-                                                      clipBehavior: Clip.none,
-                                                      children: [
-
+                                              builder: (dialogContext) { // Início do builder do showDialog
+                                                return StatefulBuilder( // Para atualizar o estado do dialog (contador)
+                                                  builder: (context, setStateDialog) { // Início do builder do StatefulBuilder
+                                                    return Material(
+                                                      color: Colors.transparent,
+                                                      child: UnconstrainedBox(
+                                                        child: Stack(
+                                                          clipBehavior: Clip.none,
+                                                          children: [
+                                                            // ... (conteúdo do dialog)
+                                                        
                                                         /*
                                                           Quadrado externo maior que a lista
                                                         */ 
@@ -366,21 +369,42 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                               color: Colors.white,
                                                               borderRadius: BorderRadius.circular(10),
                                                               border: Border.all(color: Colors.grey.shade400),
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.all(8.0),
-                                                              child: TextField(
-                                                                keyboardType: TextInputType.multiline,
-                                                                maxLines: null,
-                                                                controller: _commentController,
-                                                                decoration: const InputDecoration(
-                                                                  hintText: "Escreva seu comentário...",
-                                                                  border: InputBorder.none,
+                                                            ), 
+                                                            child: Stack(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 20), // Espaço para o contador
+                                                                  child: TextField(
+                                                                    keyboardType: TextInputType.multiline,
+                                                                    maxLines: null,
+                                                                    controller: _commentController,
+                                                                    maxLength: 200, // Limite de caracteres
+                                                                    onChanged: (text) {
+                                                                      setStateDialog(() {}); // Atualiza o contador
+                                                                    },
+                                                                    decoration: const InputDecoration(
+                                                                      hintText: "Escreva seu comentário...",
+                                                                      border: InputBorder.none,
+                                                                      counterText: '', // Oculta o contador padrão
+                                                                    ),
+                                                                  ),
                                                                 ),
+                                                                Positioned(
+                                                                  bottom: 5,
+                                                                  right: 10,
+                                                                  child: Text(
+                                                                    '${_commentController.text.length}/200',
+                                                                    style: TextStyle(
+                                                                      color: Colors.grey[600],
+                                                                      fontSize: 12,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
+                                                        
 
                                                         /* 
                                                           Comentário
@@ -980,9 +1004,11 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
                                                           ),
                                                         ),
 
-                                                      ],
-                                                    ),
-                                                  ),
+                                                          ],
+                                                        ),
+                                                      ), // Fim do UnconstrainedBox
+                                                    );
+                                                  },
                                                 );
                                               },
                                             );
