@@ -76,7 +76,7 @@ Certifique-se de ter:
 **1 - Clone o repositório:**
 
 ```http
-git clone https://github.com/Ricardo-Brand/Pokedex_TCG.git
+git clone git@github.com:Ricardo-Brand/Pokedex_TCG.git
 ```
 
 **2 - Entre na pasta:**
